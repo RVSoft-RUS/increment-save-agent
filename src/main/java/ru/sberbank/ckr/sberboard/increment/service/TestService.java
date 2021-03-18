@@ -17,9 +17,9 @@ public class TestService {
 
     public void test(){
         System.out.println(jdbcTemplate.queryForList("select 'helloworld';", String.class));
-        IncrementStates incrementStates = repository.find("01", "02", 3L);
-        incrementStates.setSubscrId("SSSSSSSSSSSSSS");
-        incrementStates.setIncrementationState("---+++++---");
+        IncrementStates incrementStates = repository.find("01", "02", 3L, "04");
+        incrementStates.setSubscrId("---");
+        incrementStates.setIncrementationState("///");
         incrementStates.setStartDt(LocalDateTime.now());
         repository.update(incrementStates);
     }

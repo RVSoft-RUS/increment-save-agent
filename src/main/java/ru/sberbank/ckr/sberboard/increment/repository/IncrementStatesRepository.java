@@ -82,4 +82,13 @@ public class IncrementStatesRepository{
         if (incrementStatesList.isEmpty()) return null;
         return incrementStatesList.get(0);
     }
+
+    @Transactional(transactionManager = "transactionManagerRawData", readOnly = true)
+    public IncrementStates find(String packageSmd, String objType, long incrPackRunId, String targetTable) {
+        List<IncrementStates> incrementStatesList = jdbcTemplate.query("SELECT * FROM raw_data.increment_states " +
+                        "WHERE package_smd = ? AND obj_type = ? AND incr_pack_run_id = ? AND target_table = ?",
+                        new Object[]{packageSmd, objType, incrPackRunId, targetTable}, new IncrementStates.IncrementStatesMapper());
+        if (incrementStatesList.isEmpty()) return null;
+        return incrementStatesList.get(0);
+    }
 }
