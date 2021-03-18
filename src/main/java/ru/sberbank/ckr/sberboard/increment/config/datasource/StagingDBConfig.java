@@ -2,11 +2,13 @@ package ru.sberbank.ckr.sberboard.increment.config.datasource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jndi.JndiTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -95,5 +97,10 @@ public class StagingDBConfig {
     @Bean(name = "exceptionTranslationRawData")
     public PersistenceExceptionTranslationPostProcessor exceptionTranslationRawData(){
         return new PersistenceExceptionTranslationPostProcessor();
+    }
+
+    @Bean(name = "jdbcTemplateRawData")
+    public JdbcTemplate jdbcTemplateRawData(@Qualifier("dataSourceRawData") DataSource dataSource){
+        return new JdbcTemplate(dataSource);
     }
 }
