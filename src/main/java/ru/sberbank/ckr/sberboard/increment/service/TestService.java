@@ -17,11 +17,16 @@ public class TestService {
 
     public void test(){
         System.out.println(jdbcTemplate.queryForList("select 'helloworld';", String.class));
-        IncrementStates incrementStates = repository.find("01", "02", 3L, "04");
-        incrementStates.setSubscrId("---");
-        incrementStates.setIncrementationState("///");
+        IncrementStates incrementStates =
+                repository.findByPackageSmdAndObjTypeAndIncrPackRunIdAndTargetTable("01", "02", 3L, "04");
+        //IncrementStates incrementStates2 = repository.("01", "02", 3L, "04");
+        incrementStates.setSubscrId("ЯЯЯЯЯЯЯ");
+        incrementStates.setIncrementationState("ФФФФФФФ");
         incrementStates.setStartDt(LocalDateTime.now());
-        repository.update(incrementStates);
-    }
+        repository.save(incrementStates);
 
+        incrementStates = new IncrementStates();
+        incrementStates.setSubscrId("000");
+        repository.save(incrementStates);
+    }
 }
