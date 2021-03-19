@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 public class TestService {
 
     private final JdbcTemplate jdbcTemplate;
+    private final JdbcPostgresColumnInfoService service;
 
     public void test(){
         System.out.println(jdbcTemplate.queryForList("select 'helloworld';", String.class));
+
+        System.out.println(service.getColumnNamesFromTable("test"));
     }
 
 }
