@@ -13,7 +13,7 @@ public class JdbcPostgresColumnInfoDao {
     private final JdbcTemplate jdbcTemplate;
 
     /**
-     * Метод возвращает список List<Column> с информацией по каждой колонке
+     * Метод возвращает список List<Column> с информацией по каждой колонке. Схема для поиска по умолчанию - raw_data_increment.
      * @return ArrayList<Column>
      * @param table имя таблицы без схемы
      */
@@ -22,13 +22,13 @@ public class JdbcPostgresColumnInfoDao {
                 "FROM   pg_index i\n" +
                 "JOIN   pg_attribute a ON a.attrelid = i.indrelid\n" +
                 "AND a.attnum = ANY(i.indkey)\n" +
-                "WHERE  i.indrelid = 'raw_data." + table + "'::regclass\n" +
+                "WHERE  i.indrelid = 'raw_data_increment." + table + "'::regclass\n" +
                 "AND    i.indisprimary;";
         List<String> primaryKeys = jdbcTemplate.queryForList(sqlFindPrimaryKeys, String.class);
 
         String sqlGetColumns = "select * \n" +
                 "from information_schema.columns\n" +
-                "where table_name = '";
+                "where table_schema = 'raw_data_increment' AND table_name = '";
         List<Column> result =
                 jdbcTemplate.query(sqlGetColumns + table + "'", new Column.ColumnMapper());
 
