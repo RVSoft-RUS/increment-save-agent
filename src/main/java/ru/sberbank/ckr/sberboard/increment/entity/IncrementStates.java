@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(schema = "raw_data_increment", name = "increment_states")
+@Table(schema = "raw_data", name = "increment_states")
 public class IncrementStates {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
