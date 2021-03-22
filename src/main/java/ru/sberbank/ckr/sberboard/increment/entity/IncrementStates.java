@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(schema = "raw_data", name = "increment_states")
+@Table(schema = "raw_data_increment", name = "increment_states")
 public class IncrementStates {
-    @Id()
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
