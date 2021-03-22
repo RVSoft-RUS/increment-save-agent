@@ -1,9 +1,7 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
-import mapper.ColumnRowMapper;
+import ru.sberbank.ckr.sberboard.increment.mapper.ColumnRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -42,7 +40,6 @@ public class TestJdbcTemplateBatch {
         columns.put("city", Arrays.asList("Volgograd","Kaluga","Samara","No city","Washington","Los Angelos","Berlin"));
     }
 
-    @EventListener(ApplicationReadyEvent.class)
     public void upsert(){
         String sqlQuery =  queryBuild(columns);
         List<Column> columnsFromTable =  findAllColumns("test_batch");

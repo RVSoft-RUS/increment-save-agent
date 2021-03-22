@@ -1,4 +1,4 @@
-package mapper;
+package ru.sberbank.ckr.sberboard.increment.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import ru.sberbank.ckr.sberboard.increment.utils.Column;
