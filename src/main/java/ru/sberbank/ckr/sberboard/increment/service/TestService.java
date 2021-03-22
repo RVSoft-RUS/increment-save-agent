@@ -16,7 +16,7 @@ public class TestService {
 
     public void test(){
         System.out.println(jdbcTemplate.queryForList("select 'helloworld';", String.class));
-        System.out.println(dao.getColumnNamesFromTable("test"));
+        System.out.println(dao.getColumnNamesFromTable("test_batch"));
         System.out.println(repository.findByPackageSmdAndObjTypeAndIncrPackRunId("01", "02", 3L));
     }
 
