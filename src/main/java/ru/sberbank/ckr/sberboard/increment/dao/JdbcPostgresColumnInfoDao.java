@@ -1,21 +1,22 @@
-package ru.sberbank.ckr.sberboard.increment.service;
+package ru.sberbank.ckr.sberboard.increment.dao;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class JdbcPostgresColumnInfoService {
+public class JdbcPostgresColumnInfoDao {
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * Метод возвращает список List<Column> с информацией по каждой колонке
+     * @return ArrayList<Column>
+     * @param table имя таблицы без схемы
+     */
     public List<Column> getColumnNamesFromTable(String table) {
         String sqlFindPrimaryKeys = "SELECT a.attname\n" +
                 "FROM   pg_index i\n" +

@@ -19,14 +19,7 @@ public class Column {
         public Column mapRow(ResultSet resultSet, int i) throws SQLException {
             Column column = new Column();
             column.setColumnName(resultSet.getString("column_name"));
-            String typeName = resultSet.getString("udt_name");
-            if (typeName.equals("varchar")) {
-                int maxLength = resultSet.getInt("character_maximum_length");
-                typeName = typeName.concat("(")
-                        .concat(String.valueOf(maxLength))
-                        .concat(")");
-            }
-            column.setType(typeName);
+            column.setType(resultSet.getString("udt_name"));
             return column;
         }
     }
