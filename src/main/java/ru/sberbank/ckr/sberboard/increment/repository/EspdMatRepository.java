@@ -7,5 +7,5 @@ import ru.sberbank.ckr.sberboard.increment.entity.IncrementStates;
 
 @Repository
 public interface EspdMatRepository extends JpaRepository<EspdMat, Long> {
-    EspdMat findByPackageSmdAndSubscrId(String packageSmd, String subscrId);
+    EspdMat findAllByPackageSmdAndSubscrId(String packageSmd, String subscrId);
 }
