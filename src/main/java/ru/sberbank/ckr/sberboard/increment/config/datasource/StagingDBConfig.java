@@ -62,7 +62,7 @@ public class StagingDBConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setPersistenceUnitName("sberboard_staging");
         em.setDataSource(dataSourceRawData());
-        em.setPackagesToScan("ru.sberbank.ckr.sberboard.metricsmap.manualloading.model");
+        em.setPackagesToScan("ru.sberbank.ckr.sberboard.increment.entity");
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setJpaProperties(additionalProperties());
         em.afterPropertiesSet();
