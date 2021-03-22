@@ -42,7 +42,7 @@ public class QuartzScheduleConfiguration {
         return TriggerBuilder.newTrigger().forJob(job)
 //                .withIdentity("trigger")
 //                .withDescription("trigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("*/10 * * ? * *\t")) //	Every 30 seconds
+                .withSchedule(CronScheduleBuilder.cronSchedule("*/30 * * ? * *\t")) //	Every 30 seconds
 //                .withSchedule(CronScheduleBuilder.cronSchedule("0 */15 * ? * *")) //	Every 15 minutes
                 .build();
     }
