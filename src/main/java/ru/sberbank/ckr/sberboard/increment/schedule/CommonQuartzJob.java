@@ -11,17 +11,18 @@ import ru.sberbank.ckr.sberboard.increment.utils.Utils;
 @Component
 public class CommonQuartzJob implements Job {
 
-    private static final String manualMode = Utils.getJNDIValue("java:comp/env/increment/manual/mode");
+//    private static final String manualMode = Utils.getJNDIValue("java:comp/env/increment/manual/mode");
 
     @Autowired
     private TestService testService;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-            if (JobManualMode.ON.toString().equals(manualMode)){
-                //TODO Ручной запуск
-            } else {
-                //TODO Автоматический запуск
-            }
+//            if (JobManualMode.ON.toString().equals(manualMode)){
+//                //TODO Ручной запуск
+//            } else {
+//                //TODO Автоматический запуск
+//            }
+        testService.test();
     }
 }
