@@ -7,13 +7,6 @@
         <jndi-name>java:/env/jdbc/Staging</jndi-name>
     </resource-ref>
 
-    <!--TODO уточнить нужен ли 2й датасорс-->
-<!--    <resource-ref>-->
-<!--        <res-ref-name>jdbc/SberboardDB</res-ref-name>-->
-<!--        <res-type>javax.sql.DataSource</res-type>-->
-<!--        <jndi-name>java:/env/jdbc/SberboardDB</jndi-name>-->
-<!--    </resource-ref>-->
-
     <resource-env-ref>
         <resource-env-ref-name>kafka/bootstrapServers</resource-env-ref-name>
         <jndi-name>java:/env/kafka/bootstrapServers</jndi-name>
@@ -34,31 +27,15 @@
         <jndi-name>java:/env/kafka/modeId</jndi-name>
     </resource-env-ref>
 
-    <!--TODO использовать закомменченные переменные по необходимости-->
-<!--    <resource-env-ref>-->
-<!--        <resource-env-ref-name>batch/cronExpression/crmValue</resource-env-ref-name>-->
-<!--        <jndi-name>java:/env/batch/cronExpression/crmValue</jndi-name>-->
-<!--    </resource-env-ref>-->
+    <resource-env-ref>
+        <resource-env-ref-name>increment/cronExpression</resource-env-ref-name>
+        <jndi-name>java:/env/increment/cronExpression</jndi-name>
+    </resource-env-ref>
 
-<!--    <resource-env-ref>-->
-<!--        <resource-env-ref-name>batch/chunk/crmChunkSize</resource-env-ref-name>-->
-<!--        <jndi-name>java:/env/batch/chunk/crmChunkSize</jndi-name>-->
-<!--    </resource-env-ref>-->
-
-<!--    <resource-env-ref>-->
-<!--        <resource-env-ref-name>batch/pageSize/crmPageSize</resource-env-ref-name>-->
-<!--        <jndi-name>java:/env/batch/pageSize/crmPageSize</jndi-name>-->
-<!--    </resource-env-ref>-->
-
-<!--    <resource-env-ref>-->
-<!--        <resource-env-ref-name>batch/subscId/crmSubscId</resource-env-ref-name>-->
-<!--        <jndi-name>java:/env/batch/subscId/crmSubscId</jndi-name>-->
-<!--    </resource-env-ref>-->
-
-<!--    <resource-env-ref>-->
-<!--        <resource-env-ref-name>batch/crmJob/manualMode</resource-env-ref-name>-->
-<!--        <jndi-name>java:/env/batch/crmJob/manualMode</jndi-name>-->
-<!--    </resource-env-ref>-->
+    <resource-env-ref>
+        <resource-env-ref-name>increment/mode/manual</resource-env-ref-name>
+        <jndi-name>java:/env/increment/mode/manual</jndi-name>
+    </resource-env-ref>
 
     <resource-env-ref>
         <resource-env-ref-name>logs/filePath</resource-env-ref-name>

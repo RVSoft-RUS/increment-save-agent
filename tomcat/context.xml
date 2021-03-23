@@ -15,21 +15,6 @@
               initialSize="5"
               maxWaitMillis="-1"/>
 
-    <!--TODO уточнить нужен ли 2й датасорс-->
-<!--    <Resource name="jdbc/Staging"-->
-<!--              global="jdbc/Staging"-->
-<!--              auth="Container"-->
-<!--              factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"-->
-<!--              type="javax.sql.DataSource"-->
-<!--              driverClassName="org.postgresql.Driver"-->
-<!--              url="jdbc:postgresql://10.53.116.32:5432/инкремент"-->
-<!--              username="devstaging"-->
-<!--              password="devstaging"-->
-<!--              maxTotal="20"-->
-<!--              maxIdle="10"-->
-<!--              initialSize="5"-->
-<!--              maxWaitMillis="-1"/>-->
-
     <Environment name="kafka/bootstrapServers" value="10.53.83.50:9092,10.53.83.31:9092,10.53.83.49:9092"
                  type="java.lang.String" override="false"/>
     <!--TODO подставить корректный id приложения-->
@@ -42,26 +27,16 @@
     <Environment name="kafka/modeId" value="SBERBOARD-INCREMENT-SAVE-AGENT"
                  type="java.lang.String" override="false"/>
 
-    <!--TODO использовать закомменченные переменные по необходимости-->
-<!--    <Environment name="batch/cronExpression/crmValue" value="0 */2 * ? * *"-->
-<!--                 type="java.lang.String" override="false"/>-->
-
-<!--    <Environment name="batch/chunk/crmChunkSize" value="20"-->
-<!--                 type="java.lang.String" override="false"/>-->
-
-<!--    <Environment name="batch/pageSize/crmPageSize" value="20"-->
-<!--                 type="java.lang.String" override="false"/>-->
-
-<!--    <Environment name="batch/subscId/crmSubscId" value="3da4f7da_c2ad_4a22_a97a_04b95340ce2d"-->
-<!--                 type="java.lang.String" override="false"/>-->
-
-<!--    <Environment name="batch/crmJob/manualMode" value="ON"-->
-<!--                 type="java.lang.String" override="false"/>-->
+    <Environment name="increment/cronExpression" value="0 */2 * ? * *"
+                 type="java.lang.String" override="false"/>
 
     <Environment name="logs/filePath" value="c:/Temp/"
                  type="java.lang.String" override="false"/>
 
     <Environment name="logs/arhSize" value="10M"
+                 type="java.lang.String" override="false"/>
+
+    <Environment name="increment/mode/manual" value="OFF"
                  type="java.lang.String" override="false"/>
 
 </Context>
