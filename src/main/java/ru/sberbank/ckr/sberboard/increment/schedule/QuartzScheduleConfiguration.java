@@ -1,4 +1,4 @@
-package ru.sberbank.ckr.sberboard.increment.schedule.iskra;
+package ru.sberbank.ckr.sberboard.increment.schedule;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import ru.sberbank.ckr.sberboard.increment.common.AutoWiringSpringBeanJobFactory;
+import ru.sberbank.ckr.sberboard.increment.utils.Utils;
 
 @Configuration
 @ComponentScan(basePackages = "ru.sberbank.ckr.sberboard")
@@ -32,18 +33,14 @@ public class QuartzScheduleConfiguration {
     public JobDetail jobDetail() {
         return JobBuilder.newJob().ofType(CommonQuartzJob.class)
                 .storeDurably()
-//                .withIdentity("Job_detail")
-//                .withDescription("Job_detail")
                 .build();
     }
 
     @Bean
     public Trigger trigger(JobDetail job) {
+        String cronValue = Utils.getJNDIValue("java:comp/env/increment/cronExpression");
         return TriggerBuilder.newTrigger().forJob(job)
-//                .withIdentity("trigger")
-//                .withDescription("trigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("*/30 * * ? * *\t")) //	Every 30 seconds
-//                .withSchedule(CronScheduleBuilder.cronSchedule("0 */15 * ? * *")) //	Every 15 minutes
+                .withSchedule(CronScheduleBuilder.cronSchedule(cronValue))
                 .build();
     }
 
