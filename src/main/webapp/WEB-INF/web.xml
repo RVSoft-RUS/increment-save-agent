@@ -40,31 +40,10 @@
     <resource-env-ref-type>java.lang.String</resource-env-ref-type>
   </resource-env-ref>
 
-  <!--TODO использовать закомменченные переменные по необходимости-->
-<!--  <resource-env-ref>-->
-<!--    <resource-env-ref-name>batch/cronExpression/crmValue</resource-env-ref-name>-->
-<!--    <resource-env-ref-type>java.lang.String</resource-env-ref-type>-->
-<!--  </resource-env-ref>-->
-
-<!--  <resource-env-ref>-->
-<!--    <resource-env-ref-name>batch/chunk/crmChunkSize</resource-env-ref-name>-->
-<!--    <resource-env-ref-type>java.lang.String</resource-env-ref-type>-->
-<!--  </resource-env-ref>-->
-
-<!--  <resource-env-ref>-->
-<!--    <resource-env-ref-name>batch/pageSize/crmPageSize</resource-env-ref-name>-->
-<!--    <resource-env-ref-type>java.lang.String</resource-env-ref-type>-->
-<!--  </resource-env-ref>-->
-
-<!--  <resource-env-ref>-->
-<!--    <resource-env-ref-name>batch/subscId/crmSubscId</resource-env-ref-name>-->
-<!--    <resource-env-ref-type>java.lang.String</resource-env-ref-type>-->
-<!--  </resource-env-ref>-->
-
-<!--  <resource-env-ref>-->
-<!--    <resource-env-ref-name>batch/crmJob/manualMode</resource-env-ref-name>-->
-<!--    <resource-env-ref-type>java.lang.String</resource-env-ref-type>-->
-<!--  </resource-env-ref>-->
+  <resource-env-ref>
+    <resource-env-ref-name>increment/cronExpression</resource-env-ref-name>
+    <resource-env-ref-type>java.lang.String</resource-env-ref-type>
+  </resource-env-ref>
 
   <resource-env-ref>
     <resource-env-ref-name>logs/filePath</resource-env-ref-name>
@@ -73,6 +52,11 @@
 
   <resource-env-ref>
     <resource-env-ref-name>logs/arhSize</resource-env-ref-name>
+    <resource-env-ref-type>java.lang.String</resource-env-ref-type>
+  </resource-env-ref>
+
+  <resource-env-ref>
+    <resource-env-ref-name>increment/mode/manual</resource-env-ref-name>
     <resource-env-ref-type>java.lang.String</resource-env-ref-type>
   </resource-env-ref>
 
