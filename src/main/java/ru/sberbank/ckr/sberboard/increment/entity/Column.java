@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -22,6 +23,7 @@ public class Column {
             Column column = new Column();
             column.setColumnName(resultSet.getString("column_name"));
             column.setType(resultSet.getString("udt_name"));
+            column.setData(new ArrayList());
             return column;
         }
     }

@@ -41,7 +41,7 @@ public class TransferDataService {
         unnestColumns = unnestColumns.substring(0, unnestColumns.length() - 1);
         primaryKeys = primaryKeys.substring(0, primaryKeys.length() - 1);
         updateColumns = updateColumns.substring(0, updateColumns.length() - 1);
-        String sql = "insert into raw_data_increment."+table+"(" + insertColumns + ")\n" +
+        String sql = "insert into raw_data."+table+"(" + insertColumns + ")\n" +
                 "select " + unnestColumns + "\n" +
                 "on conflict (" + primaryKeys + ") do update set \n" + updateColumns;
         return sql;

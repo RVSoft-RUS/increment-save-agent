@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -14,8 +15,9 @@ public class JdbcPostgresColumnInfoDao {
 
     /**
      * Метод возвращает список List<Column> с информацией по каждой колонке. Схема для поиска по умолчанию - raw_data_increment.
-     * @return ArrayList<Column>
+     *
      * @param table имя таблицы без схемы
+     * @return ArrayList<Column>
      */
     public List<Column> getColumnNamesFromTable(String table) {
         String sqlFindPrimaryKeys = "SELECT a.attname\n" +
@@ -34,5 +36,10 @@ public class JdbcPostgresColumnInfoDao {
 
         result.forEach(column -> column.setPrimaryKey(primaryKeys.contains(column.getColumnName())));
         return result;
+    }
+
+    public List<Map<String, Object>> getDataFromTable(String table) {
+        String sql = "select*from raw_data_increment." + table;
+        return jdbcTemplate.queryForList(sql);
     }
 }
