@@ -23,7 +23,7 @@ public class JdbcPostgresColumnInfoDao {
                 "FROM   pg_index i\n" +
                 "JOIN   pg_attribute a ON a.attrelid = i.indrelid\n" +
                 "AND a.attnum = ANY(i.indkey)\n" +
-                "WHERE  i.indrelid = 'raw_data." + table + "'::regclass\n" +
+                "WHERE  i.indrelid = 'raw_data_increment." + table + "'::regclass\n" +
                 "AND    i.indisprimary;";
         List<String> primaryKeys = jdbcTemplate.queryForList(sqlFindPrimaryKeys, String.class);
 
