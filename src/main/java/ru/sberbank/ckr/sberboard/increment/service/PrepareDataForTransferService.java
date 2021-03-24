@@ -5,12 +5,13 @@ import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 
 @Service
 @RequiredArgsConstructor
-public class PrepareDataFoTransferService {
+public class PrepareDataForTransferService {
 
     private final JdbcPostgresColumnInfoDao jdbcPostgresColumnInfoDao;
     private final TransferDataService transferDataService;
