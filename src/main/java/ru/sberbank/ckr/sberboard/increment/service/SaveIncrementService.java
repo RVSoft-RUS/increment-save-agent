@@ -9,10 +9,7 @@ import ru.sberbank.ckr.sberboard.increment.repository.EspdMatObjRepository;
 import ru.sberbank.ckr.sberboard.increment.repository.EspdMatRepository;
 import ru.sberbank.ckr.sberboard.increment.repository.IncrementStatesRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -40,7 +37,9 @@ public class SaveIncrementService {
                         packagesToProcess.add(pack);
                     }
                 });
-        for (EspdMat espdMat: packagesToProcess) {
+        Iterator<EspdMat> iterator = packagesToProcess.iterator();
+        while (iterator.hasNext()) {
+            EspdMat espdMat = iterator.next();
             IncrementStates incrementStates =
                     incrementStatesRepository.findByPackageSmdAndObjTypeAndIncrPackRunId(
                             espdMat.getPackageSmd(),
@@ -48,10 +47,10 @@ public class SaveIncrementService {
                             espdMat.getWorkflowRunId()
                     );
             if (incrementStates != null && incrementStates.getIncrementationState() != null && (
-            incrementStates.getIncrementationState().equals("100")
-            || incrementStates.getIncrementationState().equals("10"))
-            && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
-                packagesToProcess.remove(espdMat);
+                    incrementStates.getIncrementationState().equals("100")
+                            || incrementStates.getIncrementationState().equals("10"))
+                    && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
+                iterator.remove();
             }
         }
         Map<EspdMat, List<EspdMatObj>> espdMatListMap = new HashMap<>();
