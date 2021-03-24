@@ -4,11 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao;
-import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
-import ru.sberbank.ckr.sberboard.increment.repository.EspdMatRepository;
 import ru.sberbank.ckr.sberboard.increment.repository.IncrementStatesRepository;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -31,7 +27,7 @@ public class TestService {
 //            System.out.println(a);
 //        }
        // list.forEach(id -> System.out.println(saveIncrementService.getActualPackageToProcess(id)));
-        System.out.println(saveIncrementService.getTableNamesToProcess());
+        System.out.println(saveIncrementService.getEspdMatObjsForAllActualEspdMat());
     }
 
 }
