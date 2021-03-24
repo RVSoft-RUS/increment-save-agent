@@ -10,6 +10,7 @@ import ru.sberbank.ckr.sberboard.increment.repository.EspdMatRepository;
 import ru.sberbank.ckr.sberboard.increment.repository.IncrementStatesRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -28,15 +29,12 @@ public class SaveIncrementService {
     }
 
     public Map<EspdMat, List<EspdMatObj>> getEspdMatObjsForAllActualEspdMat() {
-        List<EspdMat> packagesToProcess = new ArrayList<>();
+        List<EspdMat> packagesToProcess =
         espdMatRepository.findAllUniqueSubscribeId()
                 .stream()
                 .map(espdMatRepository::findActualEspdMatToProcess)
-                .forEach(pack -> {
-                    if (pack != null) {
-                        packagesToProcess.add(pack);
-                    }
-                });
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
         Iterator<EspdMat> iterator = packagesToProcess.iterator();
         while (iterator.hasNext()) {
             EspdMat espdMat = iterator.next();
