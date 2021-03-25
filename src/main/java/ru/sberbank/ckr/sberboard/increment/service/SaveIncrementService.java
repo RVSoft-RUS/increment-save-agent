@@ -35,39 +35,43 @@ public class SaveIncrementService {
                 .map(espdMatRepository::findActualEspdMatToProcess)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        Iterator<EspdMat> iterator = packagesToProcess.iterator();
-        while (iterator.hasNext()) {
-            EspdMat espdMat = iterator.next();
-            IncrementStates incrementStates =
-                    incrementStatesRepository.findByPackageSmdAndObjTypeAndIncrPackRunId(
-                            espdMat.getPackageSmd(),
-                            OBJ_TYPE_PACKAGE,
-                            espdMat.getWorkflowRunId()
-                    );
-            if (incrementStates != null && incrementStates.getIncrementationState() != null && (
-                    incrementStates.getIncrementationState().equals("100")
-                            || incrementStates.getIncrementationState().equals("10"))
-                    && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
-                iterator.remove();
-            }
-        }
+//        Iterator<EspdMat> iterator = packagesToProcess.iterator();
+//        while (iterator.hasNext()) {
+//            EspdMat espdMat = iterator.next();
+//            /////
+//            IncrementStates incrementStates =
+//                    incrementStatesRepository.findByPackageSmdAndObjTypeAndIncrPackRunId(
+//                            espdMat.getPackageSmd(),
+//                            OBJ_TYPE_PACKAGE,
+//                            espdMat.getWorkflowRunId()
+//                    );
+//            if (incrementStates != null && incrementStates.getIncrementationState() != null && (
+//                    incrementStates.getIncrementationState().equals("100")
+//                            || incrementStates.getIncrementationState().equals("10"))
+//                    && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
+//                iterator.remove();
+//            }
+//        }
         Map<EspdMat, List<EspdMatObj>> espdMatListMap = new HashMap<>();
         for (EspdMat espdMat: packagesToProcess) {
-            espdMatListMap.put(espdMat, espdMatObjRepository.findAllByPackageSmd(espdMat.getPackageSmd()));
+            espdMatListMap.put(espdMat, getEspdMatObjsForCurrentActualEspdMat(espdMat));
         }
         return espdMatListMap;
     }
 
-    public List<String> getTableNamesToProcess(String subscrId) {
-        EspdMat packageToProcess = espdMatRepository.findActualEspdMatToProcess(subscrId);
-        if (packageToProcess == null) {
+    public List<EspdMatObj> getEspdMatObjsForCurrentActualEspdMat(EspdMat espdMat) {
+        IncrementStates incrementStates = incrementStatesRepository.findByPackageSmdAndObjTypeAndIncrPackRunId(
+                espdMat.getPackageSmd(),
+                OBJ_TYPE_PACKAGE,
+                espdMat.getWorkflowRunId()
+        );
+        if (incrementStates != null && incrementStates.getIncrementationState() != null && (
+                incrementStates.getIncrementationState().equals("100")
+                        || incrementStates.getIncrementationState().equals("10"))
+                && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
             return null;
-        }
-        /*
-        Удалить из списка пакеты, у которых в табл increment_states есть запись
-        с именем пакета, существующим в списке после п.2, если у него
-        (Incrementation_state = "100" или = NULL) и дата workflow_end_dt в increment_states больше или равна
-         */
-        return null;
+            }
+        return espdMatObjRepository.findAllByPackageSmd(espdMat.getPackageSmd());
     }
+
 }
