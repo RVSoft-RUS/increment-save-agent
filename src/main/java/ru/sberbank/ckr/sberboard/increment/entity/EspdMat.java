@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(schema = "raw_data_increment", name = "espd_mat")
+//@Table(schema = "raw_data", name = "espd_mat")//Временно //todo Вернуть как было
 public class EspdMat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

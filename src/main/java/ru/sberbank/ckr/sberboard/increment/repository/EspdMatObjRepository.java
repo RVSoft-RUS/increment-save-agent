@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface EspdMatObjRepository extends JpaRepository<EspdMatObj, Long> {
-    List<EspdMatObj> findAllByPackageSmd(String subscrId);
+    List<EspdMatObj> findAllByPackageSmd(String packageSmd);
 }
