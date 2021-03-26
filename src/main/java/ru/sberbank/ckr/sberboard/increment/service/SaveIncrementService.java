@@ -65,7 +65,7 @@ public class SaveIncrementService {
                 OBJ_TYPE_PACKAGE,
                 espdMat.getWorkflowRunId()
         );
-        if (incrementStates != null && incrementStates.getIncrementationState() != null && (
+        if (incrementStates != null && incrementStates.getIncrementationState() != null && (//todo Enum
                 incrementStates.getIncrementationState().equals("100")
                         || incrementStates.getIncrementationState().equals("10"))
                 && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
