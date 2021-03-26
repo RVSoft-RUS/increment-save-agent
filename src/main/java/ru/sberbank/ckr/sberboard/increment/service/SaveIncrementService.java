@@ -70,7 +70,7 @@ public class SaveIncrementService {
                         || incrementStates.getIncrementationState() == 10)
                 && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
             return null;
-            }
+        }
         return espdMatObjRepository.findAllByPackageSmd(espdMat.getPackageSmd());
     }
 
