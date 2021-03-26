@@ -68,8 +68,7 @@ public class SaveIncrementService {
         if (incrementStates != null && (//todo Enum
                 incrementStates.getIncrementationState() == 100
                         || incrementStates.getIncrementationState() == 10)
-                && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) )
-        {
+                && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
             return null;
             }
         return espdMatObjRepository.findAllByPackageSmd(espdMat.getPackageSmd());
