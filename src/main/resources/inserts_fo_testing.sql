@@ -1,33 +1,4 @@
-CREATE TABLE raw_data_increment.espd_mat (
-
-                                             package_smd varchar(50) NULL,
-
-                                             subscr_id varchar(128) NULL,
-
-                                             package_smd_dt timestamp NULL,
-
-                                             workflow_run_id int8 NULL,
-
-                                             workflow_name varchar(128) NULL,
-
-                                             workflow_status varchar(4000) NULL,
-
-                                             workflow_start_dt timestamp NULL,
-
-                                             workflow_end_dt timestamp NULL,
-
-                                             espd_status varchar(20) NULL,
-
-                                             espd_err_text text NULL,
-
-                                             is_partitioned int4 NULL,
-
-                                             objs int4 NULL,
-
-                                             objs_err int4 NULL
-
-);
-
+-- INSERT INTO RAW_DATA_INCREMENT.ESPD_MAT
 insert into raw_data_increment.espd_mat(package_smd, subscr_id, package_smd_dt, workflow_run_id, workflow_name, workflow_status, workflow_start_dt, workflow_end_dt, espd_status, espd_err_text, is_partitioned, objs, objs_err)
 VALUES('af50111b-90d2-484d-8fef-dd73e1da9974','e7936129-759e-4431-95d7-76c43ce26b17',to_timestamp('2021-01-31 00:00:00', 'YYYY-MM-DD HH24:MI:SS'),1570,'wf_e7936129_759e_4431_95d7_76c43ce26b17','Succeded',to_timestamp('2021-02-02 12:18:39', 'YYYY-MM-DD HH24:MI:SS'),to_timestamp('2021-02-02 13:43:26', 'YYYY-MM-DD HH24:MI:SS'),'ESPD_OK','2021-02-01 13:21:25   Старт передачи подписки потребителю2021-02-01 13:37:53   Старт передачи подписки потребителю2021-02-01 16:57:51   Старт передачи подписки потребителю2021-02-02 09:31:05   Старт передачи подписки потребителю2021-02-02 12:19:05   Старт',1,6,0);
 insert into raw_data_increment.espd_mat(package_smd, subscr_id, package_smd_dt, workflow_run_id, workflow_name, workflow_status, workflow_start_dt, workflow_end_dt, espd_status, espd_err_text, is_partitioned, objs, objs_err)
@@ -37,41 +8,7 @@ VALUES('0c2b8566-0c66-4583-adba-7f55491d1da9','6cb3c536-26ed-47bd-9b7e-1ba76db0e
 
 
 
-
-CREATE TABLE raw_data_increment.espd_mat_obj (
-
-                                                 package_smd varchar(50) NULL,
-
-                                                 mater_id varchar(50) NULL,
-
-                                                 status_smd varchar(50) NULL,
-
-                                                 obj_id int4 NULL,
-
-                                                 mater_tgt_state varchar(50) NULL,
-
-                                                 mater_tgt_date timestamp NULL,
-
-                                                 workflow_run_id int8 NULL,
-
-                                                 src_creationdt timestamp NULL,
-
-                                                 src_expirationdt timestamp NULL,
-
-                                                 src_plannedstartdt timestamp NULL,
-
-                                                 src_real_scheme varchar(200) NULL,
-
-                                                 src_real_table varchar(200) NULL,
-
-                                                 mater_tgt_last_error varchar(4000) NULL,
-
-                                                 subscr_id varchar(50) NULL,
-
-                                                 to_ignore int4 NULL
-
-);
-
+-- INSERT INTO RAW_DATA_INCREMENT.ESPD_MAT_OBJ
 insert into raw_data_increment.espd_mat_obj(package_smd, mater_id, status_smd, obj_id, mater_tgt_state, mater_tgt_date, workflow_run_id, src_creationdt, src_expirationdt, src_plannedstartdt, src_real_scheme, src_real_table, mater_tgt_last_error, subscr_id, to_ignore)
 VALUES ('af50111b-90d2-484d-8fef-dd73e1da9974','86f0ef7c-310a-4825-bb36-2ebf0b1d44a4','Success',184647,'ESPD_OK',to_timestamp('2021-02-02 12:22:17', 'YYYY-MM-DD HH24:MI:SS'),1570,to_timestamp('2021-01-28 16:43:16', 'YYYY-MM-DD HH24:MI:SS'),to_timestamp('2021-02-03 23:59:00', 'YYYY-MM-DD HH24:MI:SS'),to_timestamp('2021-01-31 23:59:00', 'YYYY-MM-DD HH24:MI:SS'),'CRM_SberBoard_INTERNAL_CRM_CORP_SIEBEL','CX_TXB_LOG_STAT','','e7936129-759e-4431-95d7-76c43ce26b17',0);
 insert into raw_data_increment.espd_mat_obj(package_smd, mater_id, status_smd, obj_id, mater_tgt_state, mater_tgt_date, workflow_run_id, src_creationdt, src_expirationdt, src_plannedstartdt, src_real_scheme, src_real_table, mater_tgt_last_error, subscr_id, to_ignore)
@@ -88,94 +25,9 @@ insert into raw_data_increment.espd_mat_obj(package_smd, mater_id, status_smd, o
 VALUES ('0c2b8566-0c66-4583-adba-7f55491d1da9','79f6469f-5767-4b65-8e7c-1610c41dcb6c','Success',184648,'TGT_FAIL',to_timestamp('2021-02-01 10:33:28', 'YYYY-MM-DD HH24:MI:SS'),1552,to_timestamp('2021-01-24 00:49:20', 'YYYY-MM-DD HH24:MI:SS'),to_timestamp('2021-01-29 23:59:00', 'YYYY-MM-DD HH24:MI:SS'),to_timestamp('2021-01-31 23:59:00', 'YYYY-MM-DD HH24:MI:SS'),'CRM_SberBoard_INTERNAL_CRM_CORP_SIEBEL','cx_txb_schedule','','6cb3c536-26ed-47bd-9b7e-1ba76db0e714',0);
 
 
-CREATE TABLE raw_data.espd_mat (
-
-                                   package_smd varchar(50) NULL,
-
-                                   subscr_id varchar(128) NULL,
-
-                                   package_smd_dt timestamp NULL,
-
-                                   workflow_run_id int8 NULL,
-
-                                   workflow_name varchar(128) NULL,
-
-                                   workflow_status varchar(4000) NULL,
-
-                                   workflow_start_dt timestamp NULL,
-
-                                   workflow_end_dt timestamp NULL,
-
-                                   espd_status varchar(20) NULL,
-
-                                   espd_err_text text NULL,
-
-                                   is_partitioned int4 NULL,
-
-                                   objs int4 NULL,
-
-                                   objs_err int4 NULL
-
-);
 
 
-
-CREATE TABLE raw_data.espd_mat_obj (
-
-                                       package_smd varchar(50) NULL,
-
-                                       mater_id varchar(50) NULL,
-
-                                       status_smd varchar(50) NULL,
-
-                                       obj_id int4 NULL,
-
-                                       mater_tgt_state varchar(50) NULL,
-
-                                       mater_tgt_date timestamp NULL,
-
-                                       workflow_run_id int8 NULL,
-
-                                       src_creationdt timestamp NULL,
-
-                                       src_expirationdt timestamp NULL,
-
-                                       src_plannedstartdt timestamp NULL,
-
-                                       src_real_scheme varchar(200) NULL,
-
-                                       src_real_table varchar(200) NULL,
-
-                                       mater_tgt_last_error varchar(4000) NULL,
-
-                                       subscr_id varchar(50) NULL,
-
-                                       to_ignore int4 NULL
-
-);
-
-
-create table raw_data_increment.cx_txb_log_stat (
-                                                    PREV_STATUS                                                   varchar(4000)
-    ,CONFLICT_ID                                                   varchar(4000)
-    ,WAIT                                                          varchar(4000)
-    ,LAST_UPD                                                      timestamp(6)
-    ,CREATED_BY                                                    varchar(4000)
-    ,CURR_STATUS                                                   varchar(4000)
-    ,CTL_LOADING                                                   bigint
-    ,ROW_ID                                                        varchar(4000)              not null
-    ,CTL_VALIDFROM                                                 timestamp(6)
-    ,DB_LAST_UPD                                                   timestamp(6)
-    ,CREATED                                                       timestamp(6)
-    ,ACTION_ID                                                     varchar(4000)
-    ,DB_LAST_UPD_SRC                                               varchar(4000)
-    ,CTL_CSN                                                       numeric(38,0)
-    ,MODIFICATION_NUM                                              numeric(10,0)
-    ,CHANGE_DT                                                     timestamp(6)
-    ,CTL_ACTION                                                    varchar(4000)
-    ,LAST_UPD_BY                                                   varchar(4000)
-);
-
+-- INSERT INTO DATA_INCREMENT.CX_TXB_LOG_STAT
 INSERT INTO raw_data_increment.CX_TXB_LOG_STAT (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, ACTION_ID, CHANGE_DT, CURR_STATUS, DB_LAST_UPD, DB_LAST_UPD_SRC, PREV_STATUS, WAIT, CTL_LOADING) VALUES ('1-11S3S652', to_timestamp('2019-03-30 04:42:20', 'YYYY-MM-DD HH24:MI:SS'), '1-4CDRDFC', to_timestamp('2021-01-16 22:35:08', 'YYYY-MM-DD HH24:MI:SS'), '0-1', 1, '0', '1-11RQK9JC', to_timestamp('2019-03-30 04:42:20', 'YYYY-MM-DD HH24:MI:SS'), 'Закрыта', to_timestamp('2019-03-30 04:42:20', 'YYYY-MM-DD HH24:MI:SS'), 'Update DML CRP-74443', 'В работе', null, 1);
 INSERT INTO raw_data_increment.CX_TXB_LOG_STAT (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, ACTION_ID, CHANGE_DT, CURR_STATUS, DB_LAST_UPD, DB_LAST_UPD_SRC, PREV_STATUS, WAIT, CTL_LOADING) VALUES ('1-11S3S65J', to_timestamp('2019-03-30 05:01:25', 'YYYY-MM-DD HH24:MI:SS'), '1-4CDRDFC', to_timestamp('2021-01-16 22:35:08', 'YYYY-MM-DD HH24:MI:SS'), '0-1', 1, '0', '1-11RQK9JH', to_timestamp('2019-03-30 05:01:25', 'YYYY-MM-DD HH24:MI:SS'), 'Закрыта', to_timestamp('2019-03-30 05:01:25', 'YYYY-MM-DD HH24:MI:SS'), 'Update DML CRP-74443', 'В работе', null, 1);
 INSERT INTO raw_data_increment.CX_TXB_LOG_STAT (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, ACTION_ID, CHANGE_DT, CURR_STATUS, DB_LAST_UPD, DB_LAST_UPD_SRC, PREV_STATUS, WAIT, CTL_LOADING) VALUES ('1-11S3S668', to_timestamp('2019-03-30 05:21:37', 'YYYY-MM-DD HH24:MI:SS'), '1-4CDRDFC', to_timestamp('2021-01-16 22:35:08', 'YYYY-MM-DD HH24:MI:SS'), '0-1', 1, '0', '1-11RQK9JM', to_timestamp('2019-03-30 05:21:37', 'YYYY-MM-DD HH24:MI:SS'), 'Закрыта', to_timestamp('2019-03-30 05:21:37', 'YYYY-MM-DD HH24:MI:SS'), 'Update DML CRP-74443', 'В работе', null, 1);
@@ -277,52 +129,8 @@ INSERT INTO raw_data_increment.CX_TXB_LOG_STAT (ROW_ID, CREATED, CREATED_BY, LAS
 INSERT INTO raw_data_increment.CX_TXB_LOG_STAT (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, ACTION_ID, CHANGE_DT, CURR_STATUS, DB_LAST_UPD, DB_LAST_UPD_SRC, PREV_STATUS, WAIT, CTL_LOADING) VALUES ('1-11T81S4H', to_timestamp('2019-04-01 05:20:49', 'YYYY-MM-DD HH24:MI:SS'), '1-AJCB-20', to_timestamp('2021-01-16 22:35:08', 'YYYY-MM-DD HH24:MI:SS'), '0-1', 1, '0', '1-11T6YIKO', to_timestamp('2019-04-01 05:20:49', 'YYYY-MM-DD HH24:MI:SS'), 'В работе', to_timestamp('2019-04-01 05:20:49', 'YYYY-MM-DD HH24:MI:SS'), 'Update DML CRP-74443', 'Запланировано', null, 2);
 INSERT INTO raw_data_increment.CX_TXB_LOG_STAT (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, ACTION_ID, CHANGE_DT, CURR_STATUS, DB_LAST_UPD, DB_LAST_UPD_SRC, PREV_STATUS, WAIT, CTL_LOADING) VALUES ('1-11T1ONVE', to_timestamp('2019-04-01 05:25:35', 'YYYY-MM-DD HH24:MI:SS'), '1-Y2EO-46', to_timestamp('2021-01-16 22:35:08', 'YYYY-MM-DD HH24:MI:SS'), '0-1', 1, '0', '1-11T1ONUN', to_timestamp('2019-04-01 05:25:35', 'YYYY-MM-DD HH24:MI:SS'), 'Запланировано', to_timestamp('2019-04-01 05:25:35', 'YYYY-MM-DD HH24:MI:SS'), 'Update DML CRP-74443', null, null, 2);
 
-create table raw_data.cx_txb_log_stat (
-                                          PREV_STATUS                                                   varchar(4000)
-    ,CONFLICT_ID                                                   varchar(4000)
-    ,WAIT                                                          varchar(4000)
-    ,LAST_UPD                                                      timestamp(6)
-    ,CREATED_BY                                                    varchar(4000)
-    ,CURR_STATUS                                                   varchar(4000)
-    ,CTL_LOADING                                                   bigint
-    ,ROW_ID                                                        varchar(4000)              not null
-    ,CTL_VALIDFROM                                                 timestamp(6)
-    ,DB_LAST_UPD                                                   timestamp(6)
-    ,CREATED                                                       timestamp(6)
-    ,ACTION_ID                                                     varchar(4000)
-    ,DB_LAST_UPD_SRC                                               varchar(4000)
-    ,CTL_CSN                                                       numeric(38,0)
-    ,MODIFICATION_NUM                                              numeric(10,0)
-    ,CHANGE_DT                                                     timestamp(6)
-    ,CTL_ACTION                                                    varchar(4000)
-    ,LAST_UPD_BY                                                   varchar(4000)
-);
 
-create table raw_data_increment.cx_txb_schedule (
-                                                    LAST_UPD_BY                                                   varchar(4000)
-    ,BREAK_START                                                   numeric(4,0)
-    ,BREAK2_END                                                    numeric(4,0)
-    ,CTL_ACTION                                                    varchar(4000)
-    ,LAST_UPD                                                      timestamp(6)
-    ,SHIFT_DATE                                                    timestamp(6)
-    ,CONFLICT_ID                                                   varchar(4000)
-    ,CREATED_BY                                                    varchar(4000)
-    ,SHIFT_NAME                                                    varchar(4000)
-    ,CTL_VALIDFROM                                                 timestamp(6)
-    ,BREAK_END                                                     numeric(4,0)
-    ,SHIFT_END                                                     numeric(4,0)
-    ,CREATED                                                       timestamp(6)
-    ,CTL_LOADING                                                   bigint
-    ,ROW_ID                                                        varchar(4000)              not null
-    ,CTL_CSN                                                       numeric(38,0)
-    ,DB_LAST_UPD_SRC                                               varchar(4000)
-    ,BREAK2_START                                                  numeric(4,0)
-    ,DB_LAST_UPD                                                   timestamp(6)
-    ,PAR_ROW_ID                                                    varchar(4000)
-    ,MODIFICATION_NUM                                              numeric(10,0)
-    ,SHIFT_START                                                   numeric(4,0)
-);
-
+-- INSERT INTO RAW_DATA_INCREMENT.CX_TXB_SCHEDULE
 INSERT INTO raw_data_increment.CX_TXB_SCHEDULE (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, BREAK_END, BREAK_START, DB_LAST_UPD, DB_LAST_UPD_SRC, PAR_ROW_ID, SHIFT_DATE, SHIFT_END, SHIFT_NAME, SHIFT_START, BREAK2_END, BREAK2_START, CTL_LOADING) VALUES ('1-11S3N1VM', to_timestamp('2019-03-30 10:11:44', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', to_timestamp('2019-03-30 10:11:44', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', 0, '0', null, null, to_timestamp('2019-03-30 10:11:44', 'YYYY-MM-DD HH24:MI:SS'), 'ScriptingService_PreInvokeMethod', '1-11S3N1UE', to_timestamp('2019-04-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), null, 'Не работает', null, null, null, 1);
 INSERT INTO raw_data_increment.CX_TXB_SCHEDULE (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, BREAK_END, BREAK_START, DB_LAST_UPD, DB_LAST_UPD_SRC, PAR_ROW_ID, SHIFT_DATE, SHIFT_END, SHIFT_NAME, SHIFT_START, BREAK2_END, BREAK2_START, CTL_LOADING) VALUES ('1-11S3N1XB', to_timestamp('2019-03-30 10:11:44', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', to_timestamp('2019-03-30 10:11:44', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', 0, '0', null, null, to_timestamp('2019-03-30 10:11:44', 'YYYY-MM-DD HH24:MI:SS'), 'ScriptingService_PreInvokeMethod', '1-11S3N1UE', to_timestamp('2019-04-02 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), null, 'Не работает', null, null, null, 1);
 INSERT INTO raw_data_increment.CX_TXB_SCHEDULE (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, BREAK_END, BREAK_START, DB_LAST_UPD, DB_LAST_UPD_SRC, PAR_ROW_ID, SHIFT_DATE, SHIFT_END, SHIFT_NAME, SHIFT_START, BREAK2_END, BREAK2_START, CTL_LOADING) VALUES ('1-11S3N1XC', to_timestamp('2019-03-30 10:11:44', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', to_timestamp('2019-03-30 10:11:44', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', 0, '0', null, null, to_timestamp('2019-03-30 10:11:44', 'YYYY-MM-DD HH24:MI:SS'), 'ScriptingService_PreInvokeMethod', '1-11S3N1UE', to_timestamp('2019-04-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), null, 'Не работает', null, null, null, 1);
@@ -423,29 +231,3 @@ INSERT INTO raw_data_increment.CX_TXB_SCHEDULE (ROW_ID, CREATED, CREATED_BY, LAS
 INSERT INTO raw_data_increment.CX_TXB_SCHEDULE (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, BREAK_END, BREAK_START, DB_LAST_UPD, DB_LAST_UPD_SRC, PAR_ROW_ID, SHIFT_DATE, SHIFT_END, SHIFT_NAME, SHIFT_START, BREAK2_END, BREAK2_START, CTL_LOADING) VALUES ('1-11S3N21D', to_timestamp('2019-03-30 10:11:45', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', to_timestamp('2019-03-30 10:11:45', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', 0, '0', null, null, to_timestamp('2019-03-30 10:11:45', 'YYYY-MM-DD HH24:MI:SS'), 'ScriptingService_PreInvokeMethod', '1-ZI56F0A', to_timestamp('2019-04-28 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), null, 'Не работает', null, null, null, 2);
 INSERT INTO raw_data_increment.CX_TXB_SCHEDULE (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, BREAK_END, BREAK_START, DB_LAST_UPD, DB_LAST_UPD_SRC, PAR_ROW_ID, SHIFT_DATE, SHIFT_END, SHIFT_NAME, SHIFT_START, BREAK2_END, BREAK2_START, CTL_LOADING) VALUES ('1-11S3N21E', to_timestamp('2019-03-30 10:11:45', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', to_timestamp('2019-03-30 10:11:45', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', 0, '0', 1500, 1400, to_timestamp('2019-03-30 10:11:45', 'YYYY-MM-DD HH24:MI:SS'), 'ScriptingService_PreInvokeMethod', '1-ZI56F0A', to_timestamp('2019-04-29 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1900, 'Смена №3', 1000, null, null, 2);
 INSERT INTO raw_data_increment.CX_TXB_SCHEDULE (ROW_ID, CREATED, CREATED_BY, LAST_UPD, LAST_UPD_BY, MODIFICATION_NUM, CONFLICT_ID, BREAK_END, BREAK_START, DB_LAST_UPD, DB_LAST_UPD_SRC, PAR_ROW_ID, SHIFT_DATE, SHIFT_END, SHIFT_NAME, SHIFT_START, BREAK2_END, BREAK2_START, CTL_LOADING) VALUES ('1-11S3N21F', to_timestamp('2019-03-30 10:11:45', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', to_timestamp('2019-03-30 10:11:45', 'YYYY-MM-DD HH24:MI:SS'), '1-XBSVRB4', 0, '0', 1500, 1400, to_timestamp('2019-03-30 10:11:45', 'YYYY-MM-DD HH24:MI:SS'), 'ScriptingService_PreInvokeMethod', '1-ZI56F0A', to_timestamp('2019-04-30 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), 1800, 'Смена №3 (сокр)', 1000, null, null, 2);
-
-create table raw_data.cx_txb_schedule (
-                                          LAST_UPD_BY                                                   varchar(4000)
-    ,BREAK_START                                                   numeric(4,0)
-    ,BREAK2_END                                                    numeric(4,0)
-    ,CTL_ACTION                                                    varchar(4000)
-    ,LAST_UPD                                                      timestamp(6)
-    ,SHIFT_DATE                                                    timestamp(6)
-    ,CONFLICT_ID                                                   varchar(4000)
-    ,CREATED_BY                                                    varchar(4000)
-    ,SHIFT_NAME                                                    varchar(4000)
-    ,CTL_VALIDFROM                                                 timestamp(6)
-    ,BREAK_END                                                     numeric(4,0)
-    ,SHIFT_END                                                     numeric(4,0)
-    ,CREATED                                                       timestamp(6)
-    ,CTL_LOADING                                                   bigint
-    ,ROW_ID                                                        varchar(4000)              not null
-    ,CTL_CSN                                                       numeric(38,0)
-    ,DB_LAST_UPD_SRC                                               varchar(4000)
-    ,BREAK2_START                                                  numeric(4,0)
-    ,DB_LAST_UPD                                                   timestamp(6)
-    ,PAR_ROW_ID                                                    varchar(4000)
-    ,MODIFICATION_NUM                                              numeric(10,0)
-    ,SHIFT_START                                                   numeric(4,0)
-);
-
