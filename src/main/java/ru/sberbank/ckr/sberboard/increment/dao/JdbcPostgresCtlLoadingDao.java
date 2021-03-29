@@ -8,18 +8,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class JdbcPostgresCtlLoadingDao {
     private final JdbcTemplate jdbcTemplate;
+    private final String ctlLoading = "CTL_LOADING";
 
     /**
      * Метод возвращает максимальное значение CTL_LOADING (тип Long) для указанной таблицы.
      * Схема для поиска по умолчанию - raw_data_increment.
      *
      * @param table имя таблицы без схемы (схема - raw_data_increment)
-     * @return CTL_LOADING (тип Long)
+     * @return <code>CTL_LOADING</code> (тип {@link java.lang.Long})
      */
     public Long getMaxCtlLoadingFromTable(String table) {
-        String sqlSelectMax = "SELECT MAX(CTL_LOADING) " +
-                "FROM raw_data_increment." + table;
-        return jdbcTemplate.queryForObject(sqlSelectMax, Long.class);
+        String sqlSelectMax = "SELECT COALESCE(MAX(?1), 0)  " +
+                "FROM ?2";
+        return jdbcTemplate.queryForObject(sqlSelectMax, new String[] {ctlLoading, "raw_data." + table}, Long.class);
     }
 
     /**
@@ -27,12 +28,12 @@ public class JdbcPostgresCtlLoadingDao {
      * Схема для поиска по умолчанию - raw_data_increment.
      *
      * @param table имя таблицы без схемы (схема - raw_data_increment)
-     * @return CTL_LOADING (тип Long)
+     * @return <code>CTL_LOADING</code> (тип {@link java.lang.Long})
      */
     public Long getMinCtlLoadingFromTable(String table) {
-        String sqlSelectMax = "SELECT MIN(CTL_LOADING) " +
-                "FROM raw_data_increment." + table;
-        return jdbcTemplate.queryForObject(sqlSelectMax, Long.class);
+        String sqlSelectMin = "SELECT COALESCE(MIN(?1), 0) " +
+                "FROM ?2" + table;
+        return jdbcTemplate.queryForObject(sqlSelectMin, new String[] {ctlLoading, "raw_data." + table}, Long.class);
     }
 
 }
