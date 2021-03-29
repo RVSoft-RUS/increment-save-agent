@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS raw_data.increment_states
     target_table varchar(50),
     min_ctl_loading bigint,
     max_ctl_loading bigint,
-    incrementation_state varchar(20)
+    incrementation_state integer
 );
 -- Добавить кому-то права на чтение/изменение?
 

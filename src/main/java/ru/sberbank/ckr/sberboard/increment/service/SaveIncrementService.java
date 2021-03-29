@@ -65,12 +65,12 @@ public class SaveIncrementService {
                 OBJ_TYPE_PACKAGE,
                 espdMat.getWorkflowRunId()
         );
-        if (incrementStates != null && incrementStates.getIncrementationState() != null && (
-                incrementStates.getIncrementationState().equals("100")
-                        || incrementStates.getIncrementationState().equals("10"))
+        if (incrementStates != null && (//todo Enum
+                incrementStates.getIncrementationState() == 100
+                        || incrementStates.getIncrementationState() == 10)
                 && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
             return null;
-            }
+        }
         return espdMatObjRepository.findAllByPackageSmd(espdMat.getPackageSmd());
     }
 
