@@ -27,7 +27,7 @@
     <Environment name="kafka/modeId" value="SBERBOARD-INCREMENT-SAVE-AGENT"
                  type="java.lang.String" override="false"/>
 
-    <Environment name="increment/cronExpression" value="0 */2 * ? * *"
+    <Environment name="increment/cronExpression" value="*/20 * * ? * *"
                  type="java.lang.String" override="false"/>
 
     <Environment name="logs/filePath" value="c:/Temp/"
