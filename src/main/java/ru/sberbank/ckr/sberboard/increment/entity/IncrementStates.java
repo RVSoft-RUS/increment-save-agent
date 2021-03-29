@@ -39,6 +39,6 @@ public class IncrementStates {
     @Column(name = "max_ctl_loading")
     private Long maxCtlLoading;
     @Column(name = "incrementation_state")
-    private String incrementationState;
+    private Integer incrementationState;
 }
 
