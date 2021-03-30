@@ -2,12 +2,12 @@ package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatObjRawDataIncrementDAO;
+import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatRawDataIncrementDAO;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
-import ru.sberbank.ckr.sberboard.increment.entity.IncrementStates;
-import ru.sberbank.ckr.sberboard.increment.repository.EspdMatObjRepository;
-import ru.sberbank.ckr.sberboard.increment.repository.EspdMatRepository;
-import ru.sberbank.ckr.sberboard.increment.repository.IncrementStatesRepository;
+import ru.sberbank.ckr.sberboard.increment.entity.IncrementState;
+import ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,24 +15,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class SaveIncrementService {
-    private final EspdMatRepository espdMatRepository;
-    private final EspdMatObjRepository espdMatObjRepository;
-    private final IncrementStatesRepository incrementStatesRepository;
+    private final EspdMatRawDataIncrementDAO espdMatDAO;
+    private final EspdMatObjRawDataIncrementDAO espdMatObjDAO;
+    private final IncrementStateRepository incrementStateRepository;
     private final String OBJ_TYPE_PACKAGE = "package";
 
     public List<String> getUniqueDescriptions() {
-        return espdMatRepository.findAllUniqueSubscribeId();
+        return espdMatDAO.findAllUniqueSubscribeId();
     }
 
     public EspdMat getActualPackageToProcess(String subscrId) {
-        return espdMatRepository.findActualEspdMatToProcess(subscrId);
+        return espdMatDAO.findActualEspdMatToProcess(subscrId);
     }
 
     public Map<EspdMat, List<EspdMatObj>> getEspdMatObjsForAllActualEspdMat() {
         List<EspdMat> packagesToProcess =
-        espdMatRepository.findAllUniqueSubscribeId()
+        espdMatDAO.findAllUniqueSubscribeId()
                 .stream()
-                .map(espdMatRepository::findActualEspdMatToProcess)
+                .map(espdMatDAO::findActualEspdMatToProcess)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 //        Iterator<EspdMat> iterator = packagesToProcess.iterator();
@@ -60,18 +60,18 @@ public class SaveIncrementService {
     }
 
     public List<EspdMatObj> getEspdMatObjsForCurrentActualEspdMat(EspdMat espdMat) {
-        IncrementStates incrementStates = incrementStatesRepository.findByPackageSmdAndObjTypeAndIncrPackRunId(
+        IncrementState incrementState = incrementStateRepository.findByPackageSmdAndObjTypeAndIncrPackRunId(
                 espdMat.getPackageSmd(),
                 OBJ_TYPE_PACKAGE,
                 espdMat.getWorkflowRunId()
         );
-        if (incrementStates != null && (//todo Enum
-                incrementStates.getIncrementationState() == 100
-                        || incrementStates.getIncrementationState() == 10)
-                && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
+        if (incrementState != null && (//todo Enum
+                incrementState.getIncrementationState() == 100
+                        || incrementState.getIncrementationState() == 10)
+                && incrementState.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
             return null;
         }
-        return espdMatObjRepository.findAllByPackageSmd(espdMat.getPackageSmd());
+        return espdMatObjDAO.findAllByPackageSmd(espdMat.getPackageSmd());
     }
 
 }
