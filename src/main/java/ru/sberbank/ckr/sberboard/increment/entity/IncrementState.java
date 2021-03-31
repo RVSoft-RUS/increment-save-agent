@@ -1,33 +1,44 @@
 package ru.sberbank.ckr.sberboard.increment.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateObjType;
 
-import javax.persistence.*;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+@Builder
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(schema = "raw_data", name = "increment_states")
-public class IncrementStates {
+public class IncrementState {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "incr_pack_run_id")
+    private Long incrPackRunId;
     @Column(name = "package_smd")
     private String packageSmd;
     @Column(name = "subscr_id")
     private String subscrId;
+    @Enumerated(EnumType.STRING)
     @Column(name = "obj_type")
-    private String objType;
+    private IncrementStateObjType objType;
     @Column(name = "objs_in_pack")
     private Integer objsInPack;
     @Column(name = "workflow_end_dt")
     private LocalDateTime workflowEndDt;
-    @Column(name = "incr_pack_run_id")
-    private Long incrPackRunId;
     @Column(name = "start_dt")
     private LocalDateTime startDt;
     @Column(name = "end_dt")
