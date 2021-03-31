@@ -13,20 +13,19 @@ import java.util.Map;
 public class JdbcPostgresColumnInfoDao {
     private final JdbcTemplate jdbcTemplate;
 
-    /**
-     * Метод возвращает список List<Column> с информацией по каждой колонке. Схема для поиска по умолчанию - raw_data_increment.
-     *
-     * @param table имя таблицы без схемы
-     * @return ArrayList<Column>
-     */
-    public List<Column> getColumnNamesFromTable(String table) {
+    public List<String> getPrimaryKeys(String table) {
         String sqlFindPrimaryKeys = "SELECT a.attname\n" +
                 "FROM   pg_index i\n" +
                 "JOIN   pg_attribute a ON a.attrelid = i.indrelid\n" +
                 "AND a.attnum = ANY(i.indkey)\n" +
-                "WHERE  i.indrelid = 'raw_data_increment." + table + "'::regclass\n" +
+                "WHERE  i.indrelid = 'raw_data." + table + "'::regclass\n" +
                 "AND    i.indisprimary;";
-        List<String> primaryKeys = jdbcTemplate.queryForList(sqlFindPrimaryKeys, String.class);
+
+        return jdbcTemplate.queryForList(sqlFindPrimaryKeys, String.class);
+    }
+
+    public List<Column> getColumnNamesFromTable(String table) {
+
 
         String sqlGetColumns = "select * \n" +
                 "from information_schema.columns\n" +
@@ -34,7 +33,6 @@ public class JdbcPostgresColumnInfoDao {
         List<Column> result =
                 jdbcTemplate.query(sqlGetColumns + table + "'", new Column.ColumnMapper());
 
-        result.forEach(column -> column.setPrimaryKey(primaryKeys.contains(column.getColumnName())));
         return result;
     }
 
