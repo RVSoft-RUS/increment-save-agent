@@ -56,13 +56,13 @@ public class Log4j2ConfigurationFactory extends ConfigurationFactory {
     public RootLoggerComponentBuilder setRootLogger(ConfigurationBuilder<BuiltConfiguration> builder){
         RootLoggerComponentBuilder rootLogger = builder.newRootLogger(Level.INFO);
         rootLogger.add(builder.newAppenderRef("stdout"));
-        rootLogger.add(builder.newAppenderRef("sberboard-service"));
+        rootLogger.add(builder.newAppenderRef("increment-save-agent"));
         return rootLogger;
     }
 
     public AppenderComponentBuilder setConsoleAppender(ConfigurationBuilder<BuiltConfiguration> builder){
         return builder.newAppender("stdout", "Console")
-                .addAttribute("target",ConsoleAppender.Target.SYSTEM_OUT).add(setConsoleLayout(builder));
+                .addAttribute("target", ConsoleAppender.Target.SYSTEM_OUT).add(setConsoleLayout(builder));
 
     }
 
@@ -73,7 +73,7 @@ public class Log4j2ConfigurationFactory extends ConfigurationFactory {
 
 
 
-    public ComponentBuilder setSberboardTriggerPolicy(ConfigurationBuilder<BuiltConfiguration> builder){
+    public ComponentBuilder<?> setSberboardTriggerPolicy(ConfigurationBuilder<BuiltConfiguration> builder){
         return builder.newComponent("Policies")
                 .addComponent(builder.newComponent("CronTriggeringPolicy").addAttribute("schedule", "0 0 0 * * ?"))
                 .addComponent(builder.newComponent("SizeBasedTriggeringPolicy").addAttribute("size", arhSize));
@@ -85,16 +85,16 @@ public class Log4j2ConfigurationFactory extends ConfigurationFactory {
     }
 
     public AppenderComponentBuilder setSberboardAppender(ConfigurationBuilder<BuiltConfiguration> builder){
-        return builder.newAppender("sberboard-service", "RollingFile")
-                .addAttribute("fileName", filePath + "/sberboard-service.log")
-                .addAttribute("filePattern", filePath + "/archive/sberboard-service-%d{MM-dd-yy}.log.gz")
+        return builder.newAppender("increment-save-agent", "RollingFile")
+                .addAttribute("fileName", filePath + "/increment-save-agent.log")
+                .addAttribute("filePattern", filePath + "/archive/increment-save-agent-%d{MM-dd-yy}.log.gz")
                 .add(setSberboardLayout(builder))
                 .addComponent(setSberboardTriggerPolicy(builder));
     }
 
     public LoggerComponentBuilder setSberboardLogger(ConfigurationBuilder<BuiltConfiguration> builder){
-        LoggerComponentBuilder logger = builder.newLogger("ru.sbrf.ckr.sberboard", Level.INFO);
-        logger.add(builder.newAppenderRef("sberboard-service"));
+        LoggerComponentBuilder logger = builder.newLogger("ru.sberbank.ckr.sberboard", Level.INFO);
+        logger.add(builder.newAppenderRef("increment-save-agent"));
         logger.addAttribute("additivity", false);
         return logger;
     }
