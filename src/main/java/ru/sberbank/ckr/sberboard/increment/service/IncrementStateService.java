@@ -24,4 +24,8 @@ public class IncrementStateService {
         repository.save(incrementState);
     }
 
+    public void test() {
+        logger.debug("From Start");
+        logger.info("From Test Info");
+    }
 }

@@ -1,6 +1,8 @@
 package ru.sberbank.ckr.sberboard.increment.config.logging;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.config.Configuration;
@@ -22,7 +24,6 @@ import java.net.URI;
 @Plugin(name = "Log4j2ConfigurationFactory", category = ConfigurationFactory.CATEGORY)
 @Order(50)
 public class Log4j2ConfigurationFactory extends ConfigurationFactory {
-
     private static final String filePath = Utils.getJNDIValue("java:comp/env/logs/filePath");
     private static final String arhSize = Utils.getJNDIValue("java:comp/env/logs/arhSize");
 
@@ -86,8 +87,8 @@ public class Log4j2ConfigurationFactory extends ConfigurationFactory {
 
     public AppenderComponentBuilder setSberboardAppender(ConfigurationBuilder<BuiltConfiguration> builder){
         return builder.newAppender("increment-save-agent", "RollingFile")
-                .addAttribute("fileName", filePath + "/increment-save-agent.log")
-                .addAttribute("filePattern", filePath + "/archive/increment-save-agent-%d{MM-dd-yy}.log.gz")
+                .addAttribute("fileName", filePath + "increment-save-agent.log")
+                .addAttribute("filePattern", filePath + "archive/increment-save-agent-%d{MM-dd-yy}.log.gz")
                 .add(setSberboardLayout(builder))
                 .addComponent(setSberboardTriggerPolicy(builder));
     }

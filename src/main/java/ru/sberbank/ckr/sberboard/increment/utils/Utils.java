@@ -7,8 +7,7 @@ import org.springframework.jndi.JndiTemplate;
 import javax.naming.NamingException;
 
 public class Utils {
-
-    private static final Logger logger = LogManager.getLogger("Utils");
+    private static final Logger logger = LogManager.getLogger(Utils.class.getSimpleName());
 
     public static String getJNDIValue(String key){
         String value = null;
