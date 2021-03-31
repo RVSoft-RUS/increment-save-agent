@@ -18,7 +18,7 @@ public class JdbcPostgresCtlLoadingDao {
      * @return <code>CTL_LOADING</code> (тип {@link java.lang.Long})
      */
     public Long getMaxCtlLoadingFromTable(String table) {
-        String sqlSelectMax = "SELECT COALESCE(MAX(?1), 0)  " +
+        String sqlSelectMax = "SELECT MAX(?1) " +
                 "FROM ?2";
         return jdbcTemplate.queryForObject(sqlSelectMax, new String[] {ctlLoading, "raw_data." + table}, Long.class);
     }
@@ -31,7 +31,7 @@ public class JdbcPostgresCtlLoadingDao {
      * @return <code>CTL_LOADING</code> (тип {@link java.lang.Long})
      */
     public Long getMinCtlLoadingFromTable(String table) {
-        String sqlSelectMin = "SELECT COALESCE(MIN(?1), 0) " +
+        String sqlSelectMin = "SELECT MIN(?1) " +
                 "FROM ?2" + table;
         return jdbcTemplate.queryForObject(sqlSelectMin, new String[] {ctlLoading, "raw_data." + table}, Long.class);
     }
