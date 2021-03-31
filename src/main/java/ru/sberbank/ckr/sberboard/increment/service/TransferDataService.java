@@ -1,6 +1,6 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresUpsertDao;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
@@ -8,17 +8,18 @@ import ru.sberbank.ckr.sberboard.increment.entity.Column;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class TransferDataService {
 
 
-    @Autowired
-    JdbcPostgresUpsertDao jdbcPostgresUpsertDao;
+
+    final JdbcPostgresUpsertDao jdbcPostgresUpsertDao;
 
     public void upsert(String tableName, List<Column> dataFromIncrement) {
 
         String sqlQuery = queryBuild(dataFromIncrement, tableName);
 
-        jdbcPostgresUpsertDao.upset(sqlQuery, dataFromIncrement);
+        jdbcPostgresUpsertDao.upsert(sqlQuery, dataFromIncrement);
 
     }
 
@@ -41,7 +42,7 @@ public class TransferDataService {
         unnestColumns = unnestColumns.substring(0, unnestColumns.length() - 1);
         primaryKeys = primaryKeys.substring(0, primaryKeys.length() - 1);
         updateColumns = updateColumns.substring(0, updateColumns.length() - 1);
-        String sql = "insert into raw_data."+table+"(" + insertColumns + ")\n" +
+        String sql = "insert into raw_data." + table + "(" + insertColumns + ")\n" +
                 "select " + unnestColumns + "\n" +
                 "on conflict (" + primaryKeys + ") do update set \n" + updateColumns;
         return sql;
