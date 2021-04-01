@@ -2,6 +2,7 @@ package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatRawDataDAO;
@@ -10,6 +11,7 @@ import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
 import ru.sberbank.ckr.sberboard.increment.entity.IncrementState;
 import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateObjType;
 import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateStatus;
+import ru.sberbank.ckr.sberboard.increment.event.PackageProcessedEvent;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +25,7 @@ public class PackageService {
     private final IncrementStateService incrementStateService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Transactional
+    @Transactional(transactionManager = "transactionManagerRawData")
     public void processPackage(EspdMat espdMat, List<EspdMatObj> espdMatObjs) {
         IncrementState incrementForCurrentPackage = IncrementState.builder()
                 .startDt(LocalDateTime.now())
@@ -36,9 +38,9 @@ public class PackageService {
         incrementForCurrentPackage.setWorkflowEndDt(espdMat.getWorkflowEndDt());
 
         incrementStateService.saveNewIncrementStates(incrementForCurrentPackage);
-        tableService.processAllTablesInPackage(espdMatObjs);
+        espdMatObjs.forEach(espdMatObj -> tableService.processTable(espdMatObj, espdMat));
         espdMatRawDataDAO.save(espdMat);
-        applicationEventPublisher.publishEvent(incrementForCurrentPackage);
+        applicationEventPublisher.publishEvent(new PackageProcessedEvent(incrementForCurrentPackage));
     }
 
 }

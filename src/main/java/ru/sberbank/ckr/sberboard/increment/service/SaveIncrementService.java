@@ -7,6 +7,7 @@ import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatRawDataIn
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
 import ru.sberbank.ckr.sberboard.increment.entity.IncrementState;
+import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateObjType;
 import ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository;
 
 import java.util.HashMap;
@@ -21,7 +22,6 @@ public class SaveIncrementService {
     private final EspdMatRawDataIncrementDAO espdMatRawDataIncrementDAO;
     private final EspdMatObjRawDataIncrementDAO espdMatObjRawDataIncrementDAO;
     private final IncrementStateRepository incrementStatesRepository;
-    private final String OBJ_TYPE_PACKAGE = "package";
 
     public List<String> getUniqueDescriptions() {
         return espdMatRawDataIncrementDAO.findAllUniqueSubscribeId();
@@ -48,7 +48,7 @@ public class SaveIncrementService {
     public List<EspdMatObj> getEspdMatObjsForCurrentActualEspdMat(EspdMat espdMat) {
         IncrementState incrementStates = incrementStatesRepository.findByPackageSmdAndObjTypeAndIncrPackRunId(
                 espdMat.getPackageSmd(),
-                OBJ_TYPE_PACKAGE,
+                IncrementStateObjType.PACKAGE,
                 espdMat.getWorkflowRunId()
         );
         if (incrementStates != null && (//todo Enum
