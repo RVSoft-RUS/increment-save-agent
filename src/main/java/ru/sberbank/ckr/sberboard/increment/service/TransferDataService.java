@@ -13,7 +13,7 @@ public class TransferDataService {
 
 
 
-    final JdbcPostgresUpsertDao jdbcPostgresUpsertDao;
+    private final JdbcPostgresUpsertDao jdbcPostgresUpsertDao;
 
     public void upsert(String tableName, List<Column> dataFromIncrement) {
 
