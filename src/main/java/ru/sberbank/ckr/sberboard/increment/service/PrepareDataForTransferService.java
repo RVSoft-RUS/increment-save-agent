@@ -18,10 +18,9 @@ import java.util.stream.Collectors;
 public class PrepareDataForTransferService {
 
     private final JdbcPostgresColumnInfoDao jdbcPostgresColumnInfoDao;
-    private final TransferDataService transferDataService;
     private final PrimaryKeyMakerDAO primaryKeyMakerDAO;
 
-    public void getDataTable(String tableName) {
+    public List<Column> getDataTable(String tableName) {
 
         final List<String> primaryKeys = getPrimaryKeys(tableName);
 
@@ -33,7 +32,9 @@ public class PrepareDataForTransferService {
 
         joinColumnsAndData(columnList, dataList);
 
-        transferDataService.upsert(tableName, columnList);
+        return columnList;
+
+//        transferDataService.upsert(tableName, columnList);
     }
 
     private List<String> getPrimaryKeys(String tableName) {
