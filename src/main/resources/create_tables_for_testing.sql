@@ -221,4 +221,10 @@ create table raw_data.cx_txb_schedule (
     ,MODIFICATION_NUM                                              numeric(10,0)
     ,SHIFT_START                                                   numeric(4,0)
 );
-
+CREATE TABLE IF NOT EXISTS raw_data.primary_key_helper
+(
+    table_name varchar (50) not null
+    constraint primary_key_helper_pkey
+    primary key,
+    p_keys varchar (1000)
+);
