@@ -17,10 +17,11 @@
 
     <Environment name="kafka/bootstrapServers" value="10.53.83.50:9092,10.53.83.31:9092,10.53.83.49:9092"
                  type="java.lang.String" override="false"/>
-    <!--TODO подставить корректный id приложения-->
+    <!--TODO подставить корректный id приложения. Временно пользуемся id для Сервис преобразования-->
+    <!--TODO id нашего приложения: incrservice-ser-4d39-8aec-c5fc1afddb5e-->
     <Environment name="kafka/appId" value="sbrdservice-ser-421a-b27e-817a2339cb54"
                  type="java.lang.String" override="false"/>
-    <!--TODO подставить корректный id приложения-->
+    <!--TODO подставить корректный id приложения. Временно пользуемся id для Сервис преобразования-->
     <Environment name="kafka/topicName" value="sbrdservice-ser-421a-b27e-817a2339cb54"
                  type="java.lang.String" override="false"/>
 
@@ -38,5 +39,4 @@
 
     <Environment name="increment/mode/manual" value="OFF"
                  type="java.lang.String" override="false"/>
-
 </Context>
