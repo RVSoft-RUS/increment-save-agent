@@ -27,9 +27,8 @@ public class PrimaryKeyMakerDAO {
         columnsStr.deleteCharAt(columnsStr.length() - 1);
 
         String sql = "ALTER TABLE raw_data." + tableName +
-                " ADD CONSTRAINT pk_auto PRIMARY KEY ( " +
-                columnsStr.toString() +
-                " )";
+                " ADD CONSTRAINT pk_auto_" + tableName + " PRIMARY KEY ( " +
+                columnsStr.toString() + " )";
         jdbcTemplate.execute(sql);
 
     }
