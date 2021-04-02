@@ -8,6 +8,7 @@ import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
 import ru.sberbank.ckr.sberboard.increment.entity.IncrementState;
 import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateObjType;
+import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateStatus;
 import ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository;
 
 import java.util.HashMap;
@@ -23,38 +24,33 @@ public class SaveIncrementService {
     private final EspdMatObjRawDataIncrementDAO espdMatObjRawDataIncrementDAO;
     private final IncrementStateRepository incrementStatesRepository;
 
-    public List<String> getUniqueDescriptions() {
-        return espdMatRawDataIncrementDAO.findAllUniqueSubscribeId();
-    }
-
-    public EspdMat getActualPackageToProcess(String subscrId) {
-        return espdMatRawDataIncrementDAO.findActualEspdMatToProcess(subscrId);
-    }
-
     public Map<EspdMat, List<EspdMatObj>> getEspdMatObjsForAllActualEspdMat() {
         List<EspdMat> packagesToProcess =
-        espdMatRawDataIncrementDAO.findAllUniqueSubscribeId()
-                .stream()
-                .map(espdMatRawDataIncrementDAO::findActualEspdMatToProcess)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                espdMatRawDataIncrementDAO.findAllUniqueSubscribeId()
+                        .stream()
+                        .map(espdMatRawDataIncrementDAO::findActualEspdMatToProcess)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
         Map<EspdMat, List<EspdMatObj>> espdMatListMap = new HashMap<>();
-        for (EspdMat espdMat: packagesToProcess) {
-            espdMatListMap.put(espdMat, getEspdMatObjsForCurrentActualEspdMat(espdMat));
+        for (EspdMat espdMat : packagesToProcess) {
+            List<EspdMatObj> espdMatObjsList = getEspdMatObjsForCurrentActualEspdMat(espdMat);
+            if (espdMatObjsList != null) {
+                espdMatListMap.put(espdMat, espdMatObjsList);
+            }
         }
         return espdMatListMap;
     }
 
     public List<EspdMatObj> getEspdMatObjsForCurrentActualEspdMat(EspdMat espdMat) {
-        IncrementState incrementStates = incrementStatesRepository.findByPackageSmdAndObjTypeAndIncrPackRunId(
-                espdMat.getPackageSmd(),
-                IncrementStateObjType.PACKAGE,
-                espdMat.getWorkflowRunId()
+        IncrementState incrementStates = incrementStatesRepository.findBySubscrIdAndObjType(
+                espdMat.getSubscrId(),
+                IncrementStateObjType.PACKAGE
         );
-        if (incrementStates != null && (//todo Enum
-                incrementStates.getIncrementationState() == 100
-                        || incrementStates.getIncrementationState() == 10)
-                && incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt()) ) {
+        if (incrementStates != null && (
+                incrementStates.getIncrementationState() == IncrementStateStatus.PACKAGE_PROCESSED_SUCCESSFULLY.status
+                        || incrementStates.getIncrementationState() == IncrementStateStatus.PACKAGE_IN_PROCESS.status)
+                && (incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt())
+                || incrementStates.getWorkflowEndDt().isEqual(espdMat.getWorkflowEndDt()))) {
             return null;
         }
         return espdMatObjRawDataIncrementDAO.findAllByPackageSmd(espdMat.getPackageSmd());
