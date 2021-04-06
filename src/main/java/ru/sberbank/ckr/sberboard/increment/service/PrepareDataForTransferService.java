@@ -60,8 +60,8 @@ public class PrepareDataForTransferService {
 
         dataList.stream().forEach(mapData -> mapData.entrySet().stream()
                 .forEach(pair -> {
-                    if (colNames.containsKey(pair.getKey()))
-                        colNames.get(pair.getKey()).add(pair.getValue());
+                    if (colNames.containsKey(pair.getKey().toUpperCase()))
+                        colNames.get(pair.getKey().toUpperCase()).add(pair.getValue());
                 }));
 
         columnList.stream().forEach(column -> {

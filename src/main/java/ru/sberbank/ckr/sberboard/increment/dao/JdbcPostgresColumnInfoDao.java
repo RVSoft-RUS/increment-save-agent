@@ -18,17 +18,17 @@ public class JdbcPostgresColumnInfoDao {
 
     public String getPrimaryKeysFromHelper(String table) {
         logger.info("Get primary key from raw_data.primary_key_helper");
-        String sql = "SELECT p_keys FROM raw_data.primary_key_helper " +
-                "WHERE LOWER(table_name) = LOWER(?)";
+        String sql = "SELECT UPPER(p_keys) FROM raw_data.primary_key_helper " +
+                "WHERE UPPER(table_name) = UPPER(?)";
         return jdbcTemplate.queryForObject(sql, new String[]{table}, String.class);
     }
 
     public List<String> getPrimaryKeys(String table) {
-        String sqlFindPrimaryKeys = "SELECT a.attname\n" +
+        String sqlFindPrimaryKeys = "SELECT UPPER(a.attname)\n" +
                 "FROM   pg_index i\n" +
                 "JOIN   pg_attribute a ON a.attrelid = i.indrelid\n" +
                 "AND a.attnum = ANY(i.indkey)\n" +
-                "WHERE  i.indrelid = LOWER('raw_data." + table + "')::regclass\n" +
+                "WHERE  i.indrelid = UPPER('raw_data." + table + "')::regclass\n" +
                 "AND    i.indisprimary;";
 
         return jdbcTemplate.queryForList(sqlFindPrimaryKeys, String.class);
@@ -39,7 +39,7 @@ public class JdbcPostgresColumnInfoDao {
 
         String sqlGetColumns = "select * \n" +
                 "from information_schema.columns\n" +
-                "where table_schema = 'raw_data_increment' AND LOWER(table_name) = LOWER(?)";
+                "where table_schema = 'raw_data_increment' AND UPPER(table_name) = UPPER(?)";
 
         return jdbcTemplate.query(sqlGetColumns, new String[]{table}, new Column.ColumnMapper());
 
