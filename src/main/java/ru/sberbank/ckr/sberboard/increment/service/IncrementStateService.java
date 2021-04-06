@@ -17,6 +17,7 @@ public class IncrementStateService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, transactionManager = "transactionManagerRawData")
     public IncrementState saveNewIncrementStates(IncrementState incrementState) {
+        logger.info("Save new incrementState "+incrementState.toString());
         return repository.save(incrementState);
     }
 

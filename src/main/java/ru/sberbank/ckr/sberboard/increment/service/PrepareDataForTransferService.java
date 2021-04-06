@@ -1,15 +1,14 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.PrimaryKeyMakerDAO;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -19,6 +18,9 @@ public class PrepareDataForTransferService {
 
     private final JdbcPostgresColumnInfoDao jdbcPostgresColumnInfoDao;
     private final PrimaryKeyMakerDAO primaryKeyMakerDAO;
+
+    private static final Logger logger = LogManager.getLogger(PrepareDataForTransferService.class.getSimpleName());
+
 
     public List<Column> getDataTable(String tableName) {
 
@@ -40,17 +42,19 @@ public class PrepareDataForTransferService {
     private List<String> getPrimaryKeys(String tableName) {
         List<String> primaryKeys = jdbcPostgresColumnInfoDao.getPrimaryKeys(tableName);
         if (primaryKeys.size() == 0) {
+            logger.info(tableName + " doesn't have primary key");
             primaryKeys = Arrays
                     .stream(jdbcPostgresColumnInfoDao.getPrimaryKeysFromHelper(tableName)
                             .split("\\+")).map(String::trim)
                     .collect(Collectors.toList());
             primaryKeyMakerDAO.createPrimaryKeysOnTable(tableName, primaryKeys);
         }
+        logger.info("Table " + tableName + " has primary keys " + primaryKeys.toString());
         return primaryKeys;
     }
 
     private void joinColumnsAndData(List<Column> columnList, List<Map<String, Object>> dataList) {
-
+        logger.info("Join columns and data");
         final Map<String, List> colNames = columnList.stream().collect(Collectors.
                 toMap(column -> column.getColumnName(), column -> new ArrayList<>()));
 

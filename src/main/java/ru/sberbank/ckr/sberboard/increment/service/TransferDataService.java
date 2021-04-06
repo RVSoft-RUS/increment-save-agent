@@ -1,6 +1,8 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresUpsertDao;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
@@ -11,6 +13,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class TransferDataService {
 
+    private static final Logger logger = LogManager.getLogger(TransferDataService.class.getSimpleName());
 
 
     private final JdbcPostgresUpsertDao jdbcPostgresUpsertDao;
@@ -24,6 +27,7 @@ public class TransferDataService {
     }
 
     private String queryBuild(List<Column> columns, String table) {
+        logger.info("Create 'UPSERT' query  for table " + table);
         String insertColumns = "";
         String unnestColumns = "";
         String primaryKeys = "";

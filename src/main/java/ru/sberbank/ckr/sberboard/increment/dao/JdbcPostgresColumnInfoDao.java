@@ -1,6 +1,8 @@
 package ru.sberbank.ckr.sberboard.increment.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
@@ -12,8 +14,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JdbcPostgresColumnInfoDao {
     private final JdbcTemplate jdbcTemplate;
+    private static final Logger logger = LogManager.getLogger(JdbcPostgresColumnInfoDao.class.getSimpleName());
 
     public String getPrimaryKeysFromHelper(String table) {
+        logger.info("Get primary key from raw_data.primary_key_helper");
         String sql = "SELECT p_keys FROM raw_data.primary_key_helper " +
                 "WHERE LOWER(table_name) = LOWER(?)";
         return jdbcTemplate.queryForObject(sql, new String[]{table}, String.class);
@@ -31,7 +35,7 @@ public class JdbcPostgresColumnInfoDao {
     }
 
     public List<Column> getColumnNamesFromTable(String table) {
-
+        logger.info("Get column names from table "+table);
 
         String sqlGetColumns = "select * \n" +
                 "from information_schema.columns\n" +
@@ -42,6 +46,7 @@ public class JdbcPostgresColumnInfoDao {
     }
 
     public List<Map<String, Object>> getDataFromTable(String table) {
+        logger.info("Get data from table "+table);
         String sql = "select*from raw_data_increment." + table;
         return jdbcTemplate.queryForList(sql);
     }

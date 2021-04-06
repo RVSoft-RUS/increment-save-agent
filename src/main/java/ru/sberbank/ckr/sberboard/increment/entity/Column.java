@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class Column {
         @Override
         public Column mapRow(ResultSet resultSet, int i) throws SQLException {
             Column column = new Column();
-            column.setColumnName(resultSet.getString("column_name"));
+            column.setColumnName(resultSet.getString("column_name").toUpperCase());
             column.setType(resultSet.getString("udt_name"));
             column.setData(new ArrayList());
             return column;
