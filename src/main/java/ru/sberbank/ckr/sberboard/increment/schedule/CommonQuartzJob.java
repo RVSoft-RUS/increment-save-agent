@@ -1,5 +1,7 @@
 package ru.sberbank.ckr.sberboard.increment.schedule;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -30,6 +32,8 @@ public class CommonQuartzJob implements Job {
     @Autowired
     private JdbcPostgresCtlLoadingDao dao;
 
+    private static final Logger logger = LogManager.getLogger(CommonQuartzJob.class.getSimpleName());
+
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 //            if (JobManualMode.ON.toString().equals(manualMode)){
@@ -37,11 +41,15 @@ public class CommonQuartzJob implements Job {
 //            } else {
 //                //TODO Автоматический запуск
 //            }
+        //TODO Журналирование Запуск сервиса применения инкремента
+        logger.info("IncrementService starts ");
+
         Map<EspdMat, List<EspdMatObj>> espdMatObjsForAllActualEspdMat =
                 saveIncrementService.getEspdMatObjsForAllActualEspdMat();
         for(Map.Entry<EspdMat, List<EspdMatObj>> entry : espdMatObjsForAllActualEspdMat.entrySet()) {
-                packageService.processPackage(entry.getKey(), entry.getValue());
+            packageService.processPackage(entry.getKey(), entry.getValue());
         }
-        dao.getMaxCtlLoadingFromTable("cx_txb_log_stat");
+        logger.info("IncrementService finished ");
+        //TODO Журналирование Остановка сервиса применения инкремента
     }
 }

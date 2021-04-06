@@ -1,6 +1,8 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,10 +30,13 @@ public class TableService {
     private final JdbcPostgresCtlLoadingDao jdbcPostgresCtlLoadingDao;
     private final EspdMatObjRawDataDAO espdMatObjRawDataDAO;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private static final Logger logger = LogManager.getLogger(TableService.class.getSimpleName());
 
 
     @Transactional(propagation = Propagation.NESTED, transactionManager = "transactionManagerRawData")
-    void processTable(EspdMatObj espdMatObj, EspdMat espdMat){
+    void processTable(EspdMatObj espdMatObj, EspdMat espdMat) {
+        //TODO Журналирование Начало процесса применения инкремента к таблице в рамках определенного пакета
+        logger.info("Starting processing the table " + espdMatObj.getSrcRealTable());
         String tableName = espdMatObj.getSrcRealTable();
         IncrementState incrementStateForCurrentTable = IncrementState.builder()
                 .packageSmd(espdMatObj.getPackageSmd())
@@ -51,7 +56,8 @@ public class TableService {
         transferDataService.upsert(tableName, preparedDataInColumns);
         espdMatObjRawDataDAO.save(espdMatObj);
         applicationEventPublisher.publishEvent(new TableProcessedEvent(incrementStateForCurrentTable));
-
+        logger.info("Finishing processing the table " + espdMatObj.getSrcRealTable());
+        //TODO Журналирование Окончание процесса применения инкремента к таблице в рамках определенного пакета
     }
 
 }

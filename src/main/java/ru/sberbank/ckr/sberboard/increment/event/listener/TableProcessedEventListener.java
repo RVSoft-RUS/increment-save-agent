@@ -1,6 +1,8 @@
 package ru.sberbank.ckr.sberboard.increment.event.listener;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +21,16 @@ import java.time.LocalDateTime;
 public class TableProcessedEventListener {
 
     private final IncrementStateRepository repository;
+    private static final Logger logger = LogManager.getLogger(TableProcessedEventListener.class.getSimpleName());
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW, transactionManager = "transactionManagerRawData")
-    public void processTableProcessedEventCommited(TableProcessedEvent event){
+    public void processTableProcessedEventCommitted(TableProcessedEvent event){
         IncrementState incrementForCurrentTable = event.getIncrementState();
         incrementForCurrentTable.setIncrementationState(IncrementStateStatus.TABLE_PROCESSED_SUCCESSFULLY.status);
         incrementForCurrentTable.setEndDt(LocalDateTime.now());
         repository.save(incrementForCurrentTable);
+        logger.info("Committed transaction for table: "+incrementForCurrentTable.getTargetTable());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
@@ -36,6 +40,8 @@ public class TableProcessedEventListener {
         incrementForCurrentTable.setIncrementationState(IncrementStateStatus.TABLE_PROCESS_FAILED_ROLLED_BACK.status);
         incrementForCurrentTable.setEndDt(LocalDateTime.now());
         repository.save(incrementForCurrentTable);
+        logger.info("Rolled back transaction for table: "+incrementForCurrentTable.getTargetTable());
+
     }
 
 }

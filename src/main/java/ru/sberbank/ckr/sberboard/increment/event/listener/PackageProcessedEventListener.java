@@ -1,6 +1,8 @@
 package ru.sberbank.ckr.sberboard.increment.event.listener;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,22 +21,27 @@ public class PackageProcessedEventListener {
 
     private final IncrementStateRepository repository;
 
+    private static final Logger logger = LogManager.getLogger(PackageProcessedEventListener.class.getSimpleName());
+
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW, transactionManager = "transactionManagerRawData")
-    public void processPackageProcessedEventCommited(PackageProcessedEvent event){
+    public void processPackageProcessedEventCommitted(PackageProcessedEvent event){
         IncrementState incrementForCurrentPackage = event.getIncrementState();
         incrementForCurrentPackage.setIncrementationState(IncrementStateStatus.PACKAGE_PROCESSED_SUCCESSFULLY.status);
         incrementForCurrentPackage.setEndDt(LocalDateTime.now());
         repository.save(incrementForCurrentPackage);
+        logger.info("Committed transaction for package: "+incrementForCurrentPackage.getPackageSmd());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
     @Transactional(propagation = Propagation.REQUIRES_NEW, transactionManager = "transactionManagerRawData")
     public void processPackageProcessedEventRolledBack(PackageProcessedEvent event){
         IncrementState incrementForCurrentPackage = event.getIncrementState();
+        //TODO Журналирование Инициация отката транзакции инкремента пакета incrementForCurrentPackage.getPackageSmd();
         incrementForCurrentPackage.setIncrementationState(IncrementStateStatus.PACKAGE_ROLLED_BACK.status);
         incrementForCurrentPackage.setEndDt(LocalDateTime.now());
         repository.save(incrementForCurrentPackage);
+        //TODO Журналирование Результат отката транзакции инкремента пакета incrementForCurrentPackage.getPackageSmd();
+        logger.info("Rolled back transaction for package: "+incrementForCurrentPackage.getPackageSmd());
     }
-
 }

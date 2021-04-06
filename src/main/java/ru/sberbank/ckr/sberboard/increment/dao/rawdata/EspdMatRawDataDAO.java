@@ -2,6 +2,8 @@ package ru.sberbank.ckr.sberboard.increment.dao.rawdata;
 
 import lombok.RequiredArgsConstructor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 public class EspdMatRawDataDAO {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private static final Logger logger = LogManager.getLogger(EspdMatRawDataDAO.class.getSimpleName());
 
     private static final String insertEspdMat = "INSERT INTO raw_data.espd_mat" +
             "(package_smd, subscr_id, package_smd_dt, workflow_run_id, workflow_name," +
@@ -24,7 +27,7 @@ public class EspdMatRawDataDAO {
 
 
     public void save(EspdMat espdMat) {
-
+        logger.info("Save EspdMat: "+espdMat.toString());
         MapSqlParameterSource parameters = new MapSqlParameterSource();
 
         parameters.addValue("package_smd", espdMat.getPackageSmd());

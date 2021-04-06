@@ -1,6 +1,8 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +26,15 @@ public class PackageService {
     private final IncrementStateService incrementStateService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    private static final Logger logger = LogManager.getLogger(PackageService.class.getSimpleName());
+
+
     @Transactional(transactionManager = "transactionManagerRawData")
     public void processPackage(EspdMat espdMat, List<EspdMatObj> espdMatObjs) {
+        //TODO Начало обработки пакета
+
+        logger.info("Start processing the package " + espdMat.getPackageSmd());
+
         IncrementState incrementForCurrentPackage = IncrementState.builder()
                 .startDt(LocalDateTime.now())
                 .incrementationState(IncrementStateStatus.PACKAGE_IN_PROCESS.status)
@@ -40,6 +49,7 @@ public class PackageService {
         espdMatObjs.forEach(espdMatObj -> tableService.processTable(espdMatObj, espdMat));
         espdMatRawDataDAO.save(espdMat);
         applicationEventPublisher.publishEvent(new PackageProcessedEvent(incrementForCurrentPackage));
+        //TODO Завершение обработки пакета
     }
 
 }
