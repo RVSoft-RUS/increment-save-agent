@@ -47,4 +47,9 @@
         <jndi-name>java:/env/logs/arhSize</jndi-name>
     </resource-env-ref>
 
+    <resource-env-ref>
+        <resource-env-ref-name>increment/pagination/pageSize</resource-env-ref-name>
+        <jndi-name>java:/env/increment/pagination/pageSize</jndi-name>
+    </resource-env-ref>
+
 </jboss-web>
