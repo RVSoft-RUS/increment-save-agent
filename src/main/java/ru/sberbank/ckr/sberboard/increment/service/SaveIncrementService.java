@@ -1,8 +1,6 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatObjRawDataIncrementDAO;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatRawDataIncrementDAO;
@@ -11,6 +9,8 @@ import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
 import ru.sberbank.ckr.sberboard.increment.entity.IncrementState;
 import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateObjType;
 import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateStatus;
+import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
+import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 import ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository;
 
 import java.util.HashMap;
@@ -25,8 +25,7 @@ public class SaveIncrementService {
     private final EspdMatRawDataIncrementDAO espdMatRawDataIncrementDAO;
     private final EspdMatObjRawDataIncrementDAO espdMatObjRawDataIncrementDAO;
     private final IncrementStateRepository incrementStatesRepository;
-
-    private static final Logger logger = LogManager.getLogger(SaveIncrementService.class.getSimpleName());
+    private final SbBrdServiceLoggingService loggerTech;
 
     public Map<EspdMat, List<EspdMatObj>> getEspdMatObjsForAllActualEspdMat() {
         List<EspdMat> packagesToProcess =
@@ -37,22 +36,30 @@ public class SaveIncrementService {
                         .collect(Collectors.toList());
         Map<EspdMat, List<EspdMatObj>> espdMatListMap = new HashMap<>();
 
-        logger.info("Found packages to process: "+packagesToProcess.size());
+        loggerTech.send("Found packages to process: "
+                + packagesToProcess.size(), SubTypeIdLoggingEvent.INFO.name());
+
         for (EspdMat espdMat : packagesToProcess) {
 
-            logger.info("Check if the package '"+espdMat.getPackageSmd()+"' has tables to load");
+            loggerTech.send("Check if the package '" + espdMat.getPackageSmd()
+                    + "' has tables to load", SubTypeIdLoggingEvent.INFO.name());
+
             List<EspdMatObj> espdMatObjsList = getEspdMatObjsForCurrentActualEspdMat(espdMat);
 
-             if (espdMatObjsList != null) {
-                 logger.info("The package '"+espdMat.getPackageSmd()+"' has "+espdMatObjsList.size()+" tables: "+espdMatObjsList.toString());
-                 espdMatListMap.put(espdMat, espdMatObjsList);
+            if (espdMatObjsList != null) {
+                loggerTech.send("The package '" + espdMat.getPackageSmd() + "' has " + espdMatObjsList.size()
+                        + " tables: " + espdMatObjsList.toString(), SubTypeIdLoggingEvent.INFO.name());
+
+                espdMatListMap.put(espdMat, espdMatObjsList);
             }
         }
         return espdMatListMap;
     }
 
     public List<EspdMatObj> getEspdMatObjsForCurrentActualEspdMat(EspdMat espdMat) {
-        logger.info("Search incrementState for subscribe id: "+espdMat.getSubscrId());
+
+        loggerTech.send("Search incrementState for subscribe id: " + espdMat.getSubscrId(), SubTypeIdLoggingEvent.INFO.name());
+
         IncrementState incrementStates = incrementStatesRepository.findBySubscrIdAndObjType(
                 espdMat.getSubscrId(),
                 IncrementStateObjType.PACKAGE
@@ -63,10 +70,10 @@ public class SaveIncrementService {
                 && (incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt())
                 || incrementStates.getWorkflowEndDt().isEqual(espdMat.getWorkflowEndDt()))) {
 
-            logger.info("The package'"+incrementStates.getPackageSmd()+"' has already been processed");
+            loggerTech.send("The package'" + incrementStates.getPackageSmd() + "' has already been processed", SubTypeIdLoggingEvent.INFO.name());
             return null;
         }
-        logger.info("The package '"+espdMat.getSubscrId()+"' ready to process");
+        loggerTech.send("The package '" + espdMat.getSubscrId() + "' ready to process", SubTypeIdLoggingEvent.INFO.name());
 
         return espdMatObjRawDataIncrementDAO.findAllByPackageSmd(espdMat.getPackageSmd());
     }

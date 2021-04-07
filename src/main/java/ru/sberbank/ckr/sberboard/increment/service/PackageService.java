@@ -1,11 +1,11 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
+import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatRawDataDAO;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
@@ -26,14 +26,13 @@ public class PackageService {
     private final IncrementStateService incrementStateService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    private static final Logger logger = LogManager.getLogger(PackageService.class.getSimpleName());
+    private final SbBrdServiceAuditService loggerAudit;
 
 
     @Transactional(transactionManager = "transactionManagerRawData")
     public void processPackage(EspdMat espdMat, List<EspdMatObj> espdMatObjs) {
-        //TODO Начало обработки пакета
 
-        logger.info("Start processing the package " + espdMat.getPackageSmd());
+        loggerAudit.send("Start processing the package " + espdMat.getPackageSmd(), SubTypeIdAuditEvent.F0.name());
 
         IncrementState incrementForCurrentPackage = IncrementState.builder()
                 .startDt(LocalDateTime.now())
@@ -49,7 +48,8 @@ public class PackageService {
         espdMatObjs.forEach(espdMatObj -> tableService.processTable(espdMatObj, espdMat));
         espdMatRawDataDAO.save(espdMat);
         applicationEventPublisher.publishEvent(new PackageProcessedEvent(incrementForCurrentPackage));
-        //TODO Завершение обработки пакета
+
+        loggerAudit.send("Finish processing the package " + espdMat.getPackageSmd(), SubTypeIdAuditEvent.F0.name());
     }
 
 }

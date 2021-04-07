@@ -1,12 +1,12 @@
 package ru.sberbank.ckr.sberboard.increment.dao.rawdata;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
+import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
+import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 
 
 @Service
@@ -14,7 +14,7 @@ import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
 public class EspdMatObjRawDataDAO {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private static final Logger logger = LogManager.getLogger(EspdMatObjRawDataDAO.class.getSimpleName());
+    private final SbBrdServiceLoggingService loggerTech;
 
 
     private static final String insertEspdMatObj = "INSERT INTO raw_data.espd_mat_obj " +
@@ -27,7 +27,7 @@ public class EspdMatObjRawDataDAO {
 
 
     public void save(EspdMatObj espdMatObj) {
-        logger.info("Save EspdMatObj: "+espdMatObj.toString());
+        loggerTech.send("Save EspdMatObj: "+espdMatObj.toString(), SubTypeIdLoggingEvent.INFO.name());
         MapSqlParameterSource parameters = new MapSqlParameterSource();
 
 

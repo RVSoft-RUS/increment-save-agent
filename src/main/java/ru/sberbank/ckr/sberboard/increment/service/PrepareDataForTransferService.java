@@ -1,12 +1,12 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.PrimaryKeyMakerDAO;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
+import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
+import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,8 +19,7 @@ public class PrepareDataForTransferService {
     private final JdbcPostgresColumnInfoDao jdbcPostgresColumnInfoDao;
     private final PrimaryKeyMakerDAO primaryKeyMakerDAO;
 
-    private static final Logger logger = LogManager.getLogger(PrepareDataForTransferService.class.getSimpleName());
-
+    private final SbBrdServiceLoggingService loggerTech;
 
     public List<Column> getDataTable(String tableName) {
 
@@ -42,19 +41,19 @@ public class PrepareDataForTransferService {
     private List<String> getPrimaryKeys(String tableName) {
         List<String> primaryKeys = jdbcPostgresColumnInfoDao.getPrimaryKeys(tableName);
         if (primaryKeys.size() == 0) {
-            logger.info(tableName + " doesn't have primary key");
+            loggerTech.send(tableName + " doesn't have primary key", SubTypeIdLoggingEvent.INFO.name());
             primaryKeys = Arrays
                     .stream(jdbcPostgresColumnInfoDao.getPrimaryKeysFromHelper(tableName)
                             .split("\\+")).map(String::trim)
                     .collect(Collectors.toList());
             primaryKeyMakerDAO.createPrimaryKeysOnTable(tableName, primaryKeys);
         }
-        logger.info("Table " + tableName + " has primary keys " + primaryKeys.toString());
+        loggerTech.send("Table " + tableName + " has primary keys " + primaryKeys.toString(), SubTypeIdLoggingEvent.INFO.name());
         return primaryKeys;
     }
 
     private void joinColumnsAndData(List<Column> columnList, List<Map<String, Object>> dataList) {
-        logger.info("Join columns and data");
+        loggerTech.send("Join columns and data", SubTypeIdLoggingEvent.INFO.name());
         final Map<String, List> colNames = columnList.stream().collect(Collectors.
                 toMap(column -> column.getColumnName(), column -> new ArrayList<>()));
 
