@@ -1,12 +1,12 @@
 package ru.sberbank.ckr.sberboard.increment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
+import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresCtlLoadingDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatObjRawDataDAO;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
@@ -30,13 +30,14 @@ public class TableService {
     private final JdbcPostgresCtlLoadingDao jdbcPostgresCtlLoadingDao;
     private final EspdMatObjRawDataDAO espdMatObjRawDataDAO;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private static final Logger logger = LogManager.getLogger(TableService.class.getSimpleName());
+    private final SbBrdServiceAuditService loggerAudit;
 
 
     @Transactional(propagation = Propagation.NESTED, transactionManager = "transactionManagerRawData")
     void processTable(EspdMatObj espdMatObj, EspdMat espdMat) {
-        //TODO Журналирование Начало процесса применения инкремента к таблице в рамках определенного пакета
-        logger.info("Starting processing the table " + espdMatObj.getSrcRealTable());
+
+        loggerAudit.send("Starting processing the table " + espdMatObj.getSrcRealTable(), SubTypeIdAuditEvent.F0.name());
+
         String tableName = espdMatObj.getSrcRealTable();
         IncrementState incrementStateForCurrentTable = IncrementState.builder()
                 .packageSmd(espdMatObj.getPackageSmd())
@@ -56,8 +57,9 @@ public class TableService {
         transferDataService.upsert(tableName, preparedDataInColumns);
         espdMatObjRawDataDAO.save(espdMatObj);
         applicationEventPublisher.publishEvent(new TableProcessedEvent(incrementStateForCurrentTable));
-        logger.info("Finishing processing the table " + espdMatObj.getSrcRealTable());
-        //TODO Журналирование Окончание процесса применения инкремента к таблице в рамках определенного пакета
+
+        loggerAudit.send("Finishing processing the table " + espdMatObj.getSrcRealTable(), SubTypeIdAuditEvent.F0.name());
+
     }
 
 }

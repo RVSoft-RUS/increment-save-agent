@@ -1,15 +1,17 @@
 package ru.sberbank.ckr.sberboard.increment.event.listener;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
+import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
 import ru.sberbank.ckr.sberboard.increment.entity.IncrementState;
 import ru.sberbank.ckr.sberboard.increment.event.PackageProcessedEvent;
+import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
+import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 import ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository;
 import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateStatus;
 
@@ -21,7 +23,8 @@ public class PackageProcessedEventListener {
 
     private final IncrementStateRepository repository;
 
-    private static final Logger logger = LogManager.getLogger(PackageProcessedEventListener.class.getSimpleName());
+    private final SbBrdServiceLoggingService loggerTech;
+    private final SbBrdServiceAuditService loggerAudit;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW, transactionManager = "transactionManagerRawData")
@@ -30,18 +33,16 @@ public class PackageProcessedEventListener {
         incrementForCurrentPackage.setIncrementationState(IncrementStateStatus.PACKAGE_PROCESSED_SUCCESSFULLY.status);
         incrementForCurrentPackage.setEndDt(LocalDateTime.now());
         repository.save(incrementForCurrentPackage);
-        logger.info("Committed transaction for package: "+incrementForCurrentPackage.getPackageSmd());
+        loggerTech.send("Committed transaction for package: "+incrementForCurrentPackage.getPackageSmd(), SubTypeIdLoggingEvent.INFO.name());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
     @Transactional(propagation = Propagation.REQUIRES_NEW, transactionManager = "transactionManagerRawData")
     public void processPackageProcessedEventRolledBack(PackageProcessedEvent event){
         IncrementState incrementForCurrentPackage = event.getIncrementState();
-        //TODO Журналирование Инициация отката транзакции инкремента пакета incrementForCurrentPackage.getPackageSmd();
         incrementForCurrentPackage.setIncrementationState(IncrementStateStatus.PACKAGE_ROLLED_BACK.status);
         incrementForCurrentPackage.setEndDt(LocalDateTime.now());
         repository.save(incrementForCurrentPackage);
-        //TODO Журналирование Результат отката транзакции инкремента пакета incrementForCurrentPackage.getPackageSmd();
-        logger.info("Rolled back transaction for package: "+incrementForCurrentPackage.getPackageSmd());
+        loggerAudit.send("Rolled back transaction for package: "+incrementForCurrentPackage.getPackageSmd(), SubTypeIdAuditEvent.F0.name());
     }
 }

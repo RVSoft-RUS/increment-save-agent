@@ -7,6 +7,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
+import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresCtlLoadingDao;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
@@ -32,7 +34,8 @@ public class CommonQuartzJob implements Job {
     @Autowired
     private JdbcPostgresCtlLoadingDao dao;
 
-    private static final Logger logger = LogManager.getLogger(CommonQuartzJob.class.getSimpleName());
+    @Autowired
+    private SbBrdServiceAuditService loggerAudit;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -41,15 +44,13 @@ public class CommonQuartzJob implements Job {
 //            } else {
 //                //TODO Автоматический запуск
 //            }
-        //TODO Журналирование Запуск сервиса применения инкремента
-        logger.info("IncrementService starts ");
+        loggerAudit.send("Start IncrementService", SubTypeIdAuditEvent.F0.name());
 
         Map<EspdMat, List<EspdMatObj>> espdMatObjsForAllActualEspdMat =
                 saveIncrementService.getEspdMatObjsForAllActualEspdMat();
         for(Map.Entry<EspdMat, List<EspdMatObj>> entry : espdMatObjsForAllActualEspdMat.entrySet()) {
             packageService.processPackage(entry.getKey(), entry.getValue());
         }
-        logger.info("IncrementService finished ");
-        //TODO Журналирование Остановка сервиса применения инкремента
+        loggerAudit.send("Finish IncrementService", SubTypeIdAuditEvent.F0.name());
     }
 }

@@ -2,12 +2,12 @@ package ru.sberbank.ckr.sberboard.increment.dao.rawdata;
 
 
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
+import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class PrimaryKeyMakerDAO {
     private final JdbcTemplate jdbcTemplate;
 
-    private static final Logger logger = LogManager.getLogger(PrimaryKeyMakerDAO.class.getSimpleName());
+    private final SbBrdServiceLoggingService loggerTech;
 
     /**
      *
@@ -26,7 +26,7 @@ public class PrimaryKeyMakerDAO {
      */
     @Transactional("transactionManagerRawData")
     public void createPrimaryKeysOnTable(@NotNull String tableName, @NotNull List<String> columns) {
-        logger.info("Create primary keys: "+columns.toString()+" for table "+tableName);
+        loggerTech.send("Create primary keys: "+columns.toString()+" for table "+tableName, SubTypeIdLoggingEvent.INFO.name());
         StringBuilder columnsStr = new StringBuilder();
         columns.forEach(column -> columnsStr.append(column).append(","));
         columnsStr.deleteCharAt(columnsStr.length() - 1);

@@ -12,6 +12,8 @@ import ru.sberbank.ckr.sberboard.increment.entity.IncrementState;
 import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateStatus;
 import ru.sberbank.ckr.sberboard.increment.event.PackageProcessedEvent;
 import ru.sberbank.ckr.sberboard.increment.event.TableProcessedEvent;
+import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
+import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 import ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository;
 
 import java.time.LocalDateTime;
@@ -21,7 +23,7 @@ import java.time.LocalDateTime;
 public class TableProcessedEventListener {
 
     private final IncrementStateRepository repository;
-    private static final Logger logger = LogManager.getLogger(TableProcessedEventListener.class.getSimpleName());
+    private final SbBrdServiceLoggingService loggerTech;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW, transactionManager = "transactionManagerRawData")
@@ -30,7 +32,7 @@ public class TableProcessedEventListener {
         incrementForCurrentTable.setIncrementationState(IncrementStateStatus.TABLE_PROCESSED_SUCCESSFULLY.status);
         incrementForCurrentTable.setEndDt(LocalDateTime.now());
         repository.save(incrementForCurrentTable);
-        logger.info("Committed transaction for table: "+incrementForCurrentTable.getTargetTable());
+        loggerTech.send("Committed transaction for table: "+incrementForCurrentTable.getTargetTable(), SubTypeIdLoggingEvent.INFO.name());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
@@ -40,7 +42,7 @@ public class TableProcessedEventListener {
         incrementForCurrentTable.setIncrementationState(IncrementStateStatus.TABLE_PROCESS_FAILED_ROLLED_BACK.status);
         incrementForCurrentTable.setEndDt(LocalDateTime.now());
         repository.save(incrementForCurrentTable);
-        logger.info("Rolled back transaction for table: "+incrementForCurrentTable.getTargetTable());
+        loggerTech.send("Rolled back transaction for table: "+incrementForCurrentTable.getTargetTable(), SubTypeIdLoggingEvent.INFO.name());
 
     }
 
