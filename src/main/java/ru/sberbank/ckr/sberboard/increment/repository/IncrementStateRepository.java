@@ -8,5 +8,5 @@ import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateObjType;
 @Repository
 public interface IncrementStateRepository extends JpaRepository<IncrementState, Long> {
 
-    IncrementState findBySubscrIdAndObjType(String subscrId, IncrementStateObjType objType);
+    IncrementState findFirstBySubscrIdAndObjTypeOrderByStartDtDesc(String subscrId, IncrementStateObjType objType);
 }
