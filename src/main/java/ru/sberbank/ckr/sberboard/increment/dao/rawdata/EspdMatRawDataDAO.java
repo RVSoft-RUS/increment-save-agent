@@ -17,7 +17,7 @@ public class EspdMatRawDataDAO {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SbBrdServiceLoggingService loggerTech;
 
-    private static final String insertEspdMat = "INSERT INTO raw_data.espd_mat" +
+    private static final String INSERT_ESPD_MAT = "INSERT INTO raw_data.espd_mat" +
             "(package_smd, subscr_id, package_smd_dt, workflow_run_id, workflow_name," +
             " workflow_status, workflow_start_dt, workflow_end_dt, espd_status, espd_err_text," +
             " is_partitioned, objs, objs_err)" +
@@ -44,7 +44,7 @@ public class EspdMatRawDataDAO {
         parameters.addValue("objs", espdMat.getObjs());
         parameters.addValue("objs_err", espdMat.getObjsErr());
 
-        namedParameterJdbcTemplate.update(insertEspdMat, parameters);
+        namedParameterJdbcTemplate.update(INSERT_ESPD_MAT, parameters);
 
     }
 }

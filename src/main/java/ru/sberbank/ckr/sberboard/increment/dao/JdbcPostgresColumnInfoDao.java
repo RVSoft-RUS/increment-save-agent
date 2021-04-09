@@ -8,7 +8,6 @@ import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
 import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -45,9 +44,4 @@ public class JdbcPostgresColumnInfoDao {
 
     }
 
-    public List<Map<String, Object>> getDataFromTable(String table) {
-        loggerTech.send("Get data from table "+table, SubTypeIdLoggingEvent.INFO.name());
-        String sql = "select*from raw_data_increment." + table;
-        return jdbcTemplate.queryForList(sql);
-    }
 }

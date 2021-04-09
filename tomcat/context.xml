@@ -15,7 +15,7 @@
               initialSize="5"
               maxWaitMillis="-1"/>
 
-    <Environment name="kafka/bootstrapServers" value="10.53.83.50:9092,10.53.83.31:9092,10.53.83.49:9092"
+    <Environment name="kafka/bootstrapServers" value="10.53.122.202:9092, 10.53.122.210:9092"
                  type="java.lang.String" override="false"/>
     <!--TODO подставить корректный id приложения. Временно пользуемся id для Сервис преобразования-->
     <!--TODO id нашего приложения: incrservice-ser-4d39-8aec-c5fc1afddb5e-->
@@ -39,4 +39,8 @@
 
     <Environment name="increment/mode/manual" value="OFF"
                  type="java.lang.String" override="false"/>
+
+    <Environment name="increment/pagination/pageSize" value="30"
+                 type="java.lang.String" override="false"/>
+
 </Context>
