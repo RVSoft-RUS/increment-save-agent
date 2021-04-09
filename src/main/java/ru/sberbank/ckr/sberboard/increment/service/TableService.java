@@ -58,6 +58,7 @@ public class TableService {
                 .maxCtlLoading(jdbcPostgresCtlLoadingDao.getMaxCtlLoadingFromTable(tableName))
                 .incrementationState(IncrementStateStatus.TABLE_IN_PROCESS.status)
                 .build();
+        applicationEventPublisher.publishEvent(new TableProcessedEvent(incrementStateForCurrentTable));
         incrementStateService.saveNewIncrementStates(incrementStateForCurrentTable);
 
         List<Column> preparedColumns = prepareDataForTransferService.getColumns(tableName);
@@ -71,7 +72,6 @@ public class TableService {
         }
 
         espdMatObjRawDataDAO.save(espdMatObj);
-        applicationEventPublisher.publishEvent(new TableProcessedEvent(incrementStateForCurrentTable));
 
         loggerAudit.send("Finishing processing the table " + espdMatObj.getSrcRealTable(), SubTypeIdAuditEvent.F0.name());
 

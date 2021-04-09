@@ -15,7 +15,7 @@
               initialSize="5"
               maxWaitMillis="-1"/>
 
-    <Environment name="kafka/bootstrapServers" value="10.53.122.202:9092, 10.53.122.210:9092"
+    <Environment name="kafka/bootstrapServers" value="10.53.223.8:9092, 10.53.223.204:9092, 10.53.223.63:9092"
                  type="java.lang.String" override="false"/>
     <!--TODO подставить корректный id приложения. Временно пользуемся id для Сервис преобразования-->
     <!--TODO id нашего приложения: incrservice-ser-4d39-8aec-c5fc1afddb5e-->
@@ -28,7 +28,7 @@
     <Environment name="kafka/modeId" value="SBERBOARD-INCREMENT-SAVE-AGENT"
                  type="java.lang.String" override="false"/>
 
-    <Environment name="increment/cronExpression" value="*/20 * * ? * *"
+    <Environment name="increment/cronExpression" value="0 * * ? * *"
                  type="java.lang.String" override="false"/>
 
     <Environment name="logs/filePath" value="c:/Temp/"
