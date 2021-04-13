@@ -3,6 +3,7 @@ package ru.sberbank.ckr.sberboard.increment.dao.rawdata;
 
 import lombok.RequiredArgsConstructor;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -40,8 +41,8 @@ public class OperationsOnTablesRawDataDAO {
     }
 
     /**
-     * Метод проверяет, существует ли тавлица в схеме raw_data. Если не существует,
-     * то создает копию такой таблицы из схемы raw_data_increment
+     * Метод проверяет, существует ли таблица в схеме raw_data. Если не существует,
+     * то создает копию такой таблицы из схемы raw_data_increment без первичных ключей
      *
      * @param tableName имя таблицы в схеме raw_data
      */
@@ -52,8 +53,16 @@ public class OperationsOnTablesRawDataDAO {
         jdbcTemplate.execute(sql);
     }
 
+    /**
+     * Метод проверяет, существует ли в указанной таблице в схеме raw_data поле incr_pack_run_id.
+     * Если не существует, то создает такое поле.
+     *
+     * @param tableName имя таблицы в схеме raw_data
+     */
+    @Transactional(value = "transactionManagerRawData", propagation = Propagation.REQUIRED)
     public void createColumnIncrPackRunIdIfNotExist(String tableName) {
-
+        String sql = "ALTER TABLE raw_data." + tableName +
+                    " ADD COLUMN IF NOT EXISTS incr_pack_run_id bigint";
+        jdbcTemplate.execute(sql);
     }
-
 }

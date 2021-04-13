@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao;
-import ru.sberbank.ckr.sberboard.increment.dao.rawdata.DataByTableNameRawDataDao;
+import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.DataByTableNameRawDataIncrementDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.OperationsOnTablesRawDataDAO;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
 import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
@@ -28,7 +28,7 @@ public class PrepareDataForTransferService {
     private final JdbcPostgresColumnInfoDao jdbcPostgresColumnInfoDao;
     private final OperationsOnTablesRawDataDAO primaryKeyMakerDAO;
     private final SbBrdServiceLoggingService loggerTech;
-    private final DataByTableNameRawDataDao dataByTableNameRawDataDao;
+    private final DataByTableNameRawDataIncrementDao dataByTableNameRawDataDao;
 
     public List<Column> getColumns(String tableName) {
 
