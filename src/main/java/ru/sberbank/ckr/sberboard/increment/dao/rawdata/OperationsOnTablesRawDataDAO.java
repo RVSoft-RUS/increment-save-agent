@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
 import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PrimaryKeyMakerDAO {
+public class OperationsOnTablesRawDataDAO {
     private final JdbcTemplate jdbcTemplate;
 
     private final SbBrdServiceLoggingService loggerTech;
@@ -35,6 +36,23 @@ public class PrimaryKeyMakerDAO {
                 " ADD CONSTRAINT pk_auto_" + tableName + " PRIMARY KEY ( " +
                 columnsStr.toString() + " )";
         jdbcTemplate.execute(sql);
+
+    }
+
+    /**
+     * Метод проверяет, существует ли тавлица в схеме raw_data. Если не существует,
+     * то создает копию такой таблицы из схемы raw_data_increment
+     *
+     * @param tableName имя таблицы в схеме raw_data
+     */
+    @Transactional(value = "transactionManagerRawData", propagation = Propagation.REQUIRED)
+    public void createTableIfNotExist(String tableName) {
+        String sql = "CREATE TABLE IF NOT EXISTS raw_data." + tableName +
+                " AS SELECT * FROM raw_data_increment." + tableName;
+        jdbcTemplate.execute(sql);
+    }
+
+    public void createColumnIncrPackRunIdIfNotExist(String tableName) {
 
     }
 

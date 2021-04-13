@@ -11,6 +11,7 @@ import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
 import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresCtlLoadingDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatObjRawDataDAO;
+import ru.sberbank.ckr.sberboard.increment.dao.rawdata.OperationsOnTablesRawDataDAO;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
@@ -30,7 +31,7 @@ public class TableService {
 
     private static final int PAGE_SIZE = Integer.parseInt(Utils.getJNDIValue("java:comp/env/increment/pagination/pageSize"));
 
-
+    private final OperationsOnTablesRawDataDAO operationsOnTablesRawDataDAO;
     private final TransferDataService transferDataService;
     private final PrepareDataForTransferService prepareDataForTransferService;
     private final IncrementStateService incrementStateService;
@@ -59,6 +60,9 @@ public class TableService {
                 .incrementationState(IncrementStateStatus.TABLE_IN_PROCESS.status)
                 .build();
         incrementStateService.saveNewIncrementStates(incrementStateForCurrentTable);
+
+        operationsOnTablesRawDataDAO.createTableIfNotExist(tableName);
+        operationsOnTablesRawDataDAO.createColumnIncrPackRunIdIfNotExist(tableName);
 
         List<Column> preparedColumns = prepareDataForTransferService.getColumns(tableName);
         int currentPageNum;
