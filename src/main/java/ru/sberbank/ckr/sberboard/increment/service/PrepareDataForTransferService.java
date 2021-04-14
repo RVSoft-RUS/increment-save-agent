@@ -10,6 +10,7 @@ import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.DataByTableNameRawDataIncrementDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.OperationsOnTablesRawDataDAO;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
+import ru.sberbank.ckr.sberboard.increment.entity.IncrementState;
 import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
 import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 
@@ -35,6 +36,7 @@ public class PrepareDataForTransferService {
         final List<String> primaryKeys = getPrimaryKeys(tableName);
         List<Column> columnList = jdbcPostgresColumnInfoDao.getColumnNamesFromTable(tableName);
         columnList.forEach(column -> column.setPrimaryKey(primaryKeys.contains(column.getColumnName())));
+        addIncrRunPackIdColumn(columnList);
         return columnList;
 
     }
@@ -43,7 +45,7 @@ public class PrepareDataForTransferService {
         return dataByTableNameRawDataDao.getCountByTableName(tableName) / pageSize;
     };
 
-    public Page<Map<String, Object>> findPaginated(String tableName, Pageable pageable) {
+    public Page<Map<String, Object>> findPaginated(String tableName, Pageable pageable, IncrementState incrementForCurrentPackage) {
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
@@ -55,7 +57,7 @@ public class PrepareDataForTransferService {
         if (dataCount < startItem) {
             dataList = Collections.emptyList();
         } else {
-            dataList = dataByTableNameRawDataDao.getDataFromTablePaginated(tableName, primaryKeys, startItem, pageSize);
+            dataList = dataByTableNameRawDataDao.getDataFromTablePaginated(tableName, primaryKeys, startItem, pageSize, incrementForCurrentPackage);
         }
 
         return new PageImpl<>(dataList, PageRequest.of(currentPage, pageSize), dataCount);
@@ -90,5 +92,12 @@ public class PrepareDataForTransferService {
             if (colNames.containsKey(column.getColumnName()))
                 column.setData(colNames.get(column.getColumnName()));
         });
+    }
+
+    private void addIncrRunPackIdColumn(List<Column> columnList){
+        Column incrPacRunIdColumn = new Column();
+        incrPacRunIdColumn.setColumnName("INCR_PACK_RUN_ID");
+        incrPacRunIdColumn.setType("BIGINT");
+        columnList.add(incrPacRunIdColumn);
     }
 }
