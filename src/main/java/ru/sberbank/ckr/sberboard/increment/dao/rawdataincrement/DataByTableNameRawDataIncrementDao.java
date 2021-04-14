@@ -1,4 +1,4 @@
-package ru.sberbank.ckr.sberboard.increment.dao.rawdata;
+package ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class DataByTableNameRawDataDao {
+public class DataByTableNameRawDataIncrementDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final JdbcTemplate jdbcTemplate;
