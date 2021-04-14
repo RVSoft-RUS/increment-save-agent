@@ -60,7 +60,7 @@ public class SaveIncrementService {
 
         loggerTech.send("Search incrementState for subscribe id: " + espdMat.getSubscrId(), SubTypeIdLoggingEvent.INFO.name());
 
-        IncrementState incrementStates = incrementStatesRepository.findBySubscrIdAndObjType(
+        IncrementState incrementStates = incrementStatesRepository.findFirstBySubscrIdAndObjTypeOrderByStartDtDesc(
                 espdMat.getSubscrId(),
                 IncrementStateObjType.PACKAGE
         );
