@@ -43,11 +43,11 @@ public class PackageService {
         incrementForCurrentPackage.setObjType(IncrementStateObjType.PACKAGE);
         incrementForCurrentPackage.setObjsInPack(espdMat.getObjs());
         incrementForCurrentPackage.setWorkflowEndDt(espdMat.getWorkflowEndDt());
+        applicationEventPublisher.publishEvent(new PackageProcessedEvent(incrementForCurrentPackage));
 
         incrementStateService.saveNewIncrementStates(incrementForCurrentPackage);
         espdMatObjs.forEach(espdMatObj -> tableService.processTable(espdMatObj, espdMat));
         espdMatRawDataDAO.save(espdMat);
-        applicationEventPublisher.publishEvent(new PackageProcessedEvent(incrementForCurrentPackage));
 
         loggerAudit.send("Finish processing the package " + espdMat.getPackageSmd(), SubTypeIdAuditEvent.F0.name());
     }
