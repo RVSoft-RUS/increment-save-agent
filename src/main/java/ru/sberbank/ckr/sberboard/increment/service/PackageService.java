@@ -46,7 +46,7 @@ public class PackageService {
         applicationEventPublisher.publishEvent(new PackageProcessedEvent(incrementForCurrentPackage));
 
         incrementStateService.saveNewIncrementStates(incrementForCurrentPackage);
-        espdMatObjs.forEach(espdMatObj -> tableService.processTable(espdMatObj, espdMat));
+        espdMatObjs.forEach(espdMatObj -> tableService.processTable(espdMatObj, espdMat, incrementForCurrentPackage));
         espdMatRawDataDAO.save(espdMat);
 
         loggerAudit.send("Finish processing the package " + espdMat.getPackageSmd(), SubTypeIdAuditEvent.F0.name());

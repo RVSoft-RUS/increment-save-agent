@@ -42,7 +42,7 @@ public class TableService {
 
 
     @Transactional(propagation = Propagation.NESTED, transactionManager = "transactionManagerRawData")
-    void processTable(EspdMatObj espdMatObj, EspdMat espdMat) {
+    void processTable(EspdMatObj espdMatObj, EspdMat espdMat, IncrementState incrementForCurrentPackage) {
 
         loggerAudit.send("Starting processing the table " + espdMatObj.getSrcRealTable(), SubTypeIdAuditEvent.F0.name());
 
@@ -70,7 +70,7 @@ public class TableService {
         for (int i = 0; i <= prepareDataForTransferService.findPagesCount(tableName, PAGE_SIZE); i++) {
             currentPageNum = i;
             Page<Map<String, Object>> dataList =
-                    prepareDataForTransferService.findPaginated(tableName, PageRequest.of(currentPageNum, PAGE_SIZE));
+                    prepareDataForTransferService.findPaginated(tableName, PageRequest.of(currentPageNum, PAGE_SIZE), incrementForCurrentPackage);
             prepareDataForTransferService.joinColumnsAndData(preparedColumns, dataList.getContent());
             transferDataService.upsert(tableName, preparedColumns);
         }
