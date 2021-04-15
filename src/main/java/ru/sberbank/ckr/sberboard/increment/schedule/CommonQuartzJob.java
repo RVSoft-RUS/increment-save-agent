@@ -24,6 +24,7 @@ public class CommonQuartzJob implements Job {
 
     private static final String manualMode = Utils.getJNDIValue("java:comp/env/increment/mode/manual");
     private static final String manualModePackageSmd = Utils.getJNDIValue("java:comp/env/increment/manualMode/packageSmd");
+    private static volatile boolean isRunningOnManualMode = false;
 
     @Autowired
     private SaveIncrementService saveIncrementService;
@@ -47,6 +48,10 @@ public class CommonQuartzJob implements Job {
             }
             loggerAudit.send("Finish IncrementService", SubTypeIdAuditEvent.F0.name());
         } else {
+            if (isRunningOnManualMode) {
+                return;
+            }
+            isRunningOnManualMode = true;
             loggerAudit.send("Start IncrementService in manual mode. " +
                     "PackageSmd for processing: " + manualModePackageSmd, SubTypeIdAuditEvent.F0.name());
             try {

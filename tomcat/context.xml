@@ -39,7 +39,7 @@
     <Environment name="logs/arhSize" value="10M"
                  type="java.lang.String" override="false"/>
 
-    <Environment name="increment/mode/manual" value="OFF"
+    <Environment name="increment/mode/manual" value="ON"
                  type="java.lang.String" override="false"/>
 
     <Environment name="increment/manualMode/packageSmd" value="af50111b-90d2-484d-8fef-dd73e1da9974"
