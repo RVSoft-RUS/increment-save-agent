@@ -41,9 +41,9 @@ public class PrepareDataForTransferService {
 
     }
 
-    public int findPagesCount(String tableName, int pageSize){
-        return dataByTableNameRawDataDao.getCountByTableName(tableName) / pageSize;
-    };
+    public int findPagesCount(String tableName, int pageSize) {
+        return (int) Math.ceil(dataByTableNameRawDataDao.getCountByTableName(tableName) * 1.0 / pageSize);
+    }
 
     public Page<Map<String, Object>> findPaginated(String tableName, Pageable pageable, IncrementState incrementForCurrentPackage) {
         int pageSize = pageable.getPageSize();
@@ -73,12 +73,10 @@ public class PrepareDataForTransferService {
                     .collect(Collectors.toList());
             primaryKeyMakerDAO.createPrimaryKeysOnTable(tableName, primaryKeys);
         }
-        loggerTech.send("Table " + tableName + " has primary keys " + primaryKeys.toString(), SubTypeIdLoggingEvent.INFO.name());
         return primaryKeys;
     }
 
     void joinColumnsAndData(List<Column> columnList, List<Map<String, Object>> dataList) {
-        loggerTech.send("Join columns and data", SubTypeIdLoggingEvent.INFO.name());
         final Map<String, List> colNames = columnList.stream().collect(Collectors.
                 toMap(column -> column.getColumnName(), column -> new ArrayList<>()));
 
@@ -94,7 +92,7 @@ public class PrepareDataForTransferService {
         });
     }
 
-    private void addIncrRunPackIdColumn(List<Column> columnList){
+    private void addIncrRunPackIdColumn(List<Column> columnList) {
         Column incrPacRunIdColumn = new Column();
         incrPacRunIdColumn.setColumnName("INCR_PACK_RUN_ID");
         incrPacRunIdColumn.setType("BIGINT");
