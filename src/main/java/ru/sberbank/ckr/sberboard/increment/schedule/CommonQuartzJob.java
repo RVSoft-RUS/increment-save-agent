@@ -61,7 +61,6 @@ public class CommonQuartzJob implements Job {
             } catch (EmptyResultDataAccessException e) {
                 loggerAudit.send("0 packages found for PackageSmd " + manualModePackageSmd + ". " +
                       "IncrementService stopped.", SubTypeIdAuditEvent.F0.name());
-                System.exit(404);
             }
             loggerAudit.send("IncrementService <manualMode> stopped.", SubTypeIdAuditEvent.F0.name());
             System.exit(0);
