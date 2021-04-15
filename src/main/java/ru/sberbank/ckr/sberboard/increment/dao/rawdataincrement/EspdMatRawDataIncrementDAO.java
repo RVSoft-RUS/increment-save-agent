@@ -35,5 +35,15 @@ public class EspdMatRawDataIncrementDAO {
         return namedParameterJdbcTemplate.queryForObject(sql, parameters, new EspdMat.EspdMatMapper());
     }
 
+    public EspdMat findEspdMatToProcessByPackageSmd(String packageSmd) {
+//        loggerTech.send("Search package to process by packageSmd: " + packageSmd, SubTypeIdLoggingEvent.INFO.name());
+        String sql = "SELECT * " +
+                "FROM raw_data_increment.espd_mat e\n" +
+                "WHERE e.package_smd = :packageSmd AND e.espd_status = 'ESPD_OK'\n" +
+                "LIMIT 1";
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("packageSmd", packageSmd);
+        return namedParameterJdbcTemplate.queryForObject(sql, parameters, new EspdMat.EspdMatMapper());
+    }
 
 }
