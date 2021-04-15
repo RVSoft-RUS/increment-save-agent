@@ -12,6 +12,7 @@ import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresCtlLoadingDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatObjRawDataDAO;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.OperationsOnTablesRawDataDAO;
+import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.DataByTableNameRawDataIncrementDao;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
@@ -42,6 +43,7 @@ public class TableService {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final SbBrdServiceAuditService loggerAudit;
     private final SbBrdServiceLoggingService loggerTech;
+    private final DataByTableNameRawDataIncrementDao dataByTableNameRawDataIncrementDao;
 
 
     @Transactional(propagation = Propagation.NESTED, transactionManager = "transactionManagerRawData")
@@ -70,28 +72,20 @@ public class TableService {
 
         List<Column> preparedColumns = prepareDataForTransferService.getColumns(tableName);
         int currentPageNum;
-        for (int i = 0; i <= prepareDataForTransferService.findPagesCount(tableName, PAGE_SIZE); i++) {
+        int countRows = dataByTableNameRawDataIncrementDao.getCountByTableName(tableName);
+        int countPages = prepareDataForTransferService.findPagesCount(tableName, PAGE_SIZE);
+        loggerTech.send("Start transfer data to raw_data." + tableName +
+                        ". Count rows in table: " + countRows +
+                        ". Count pages: " + countPages + ". Page size: " + PAGE_SIZE,
+                SubTypeIdLoggingEvent.INFO.name());
+        for (int i = 0; i < countPages; i++) {
             currentPageNum = i;
             Page<Map<String, Object>> dataList =
                     prepareDataForTransferService.findPaginated(tableName, PageRequest.of(currentPageNum, PAGE_SIZE), incrementForCurrentPackage);
-            if (i == 0) {
-                loggerTech.send("Join columns and data", SubTypeIdLoggingEvent.INFO.name());
-            }
-
             prepareDataForTransferService.joinColumnsAndData(preparedColumns, dataList.getContent());
-
-            if (i == 0) {
-                loggerTech.send("Create 'UPSERT' query  for table " + tableName, SubTypeIdLoggingEvent.INFO.name());
-            }
-
             String sqlQuery = transferDataService.queryBuild(preparedColumns, tableName);
-
-            if (i == 0) {
-                loggerTech.send("Executing UPSERT: " + sqlQuery, SubTypeIdLoggingEvent.INFO.name());
-            }
             transferDataService.upsert(preparedColumns, sqlQuery);
         }
-
         espdMatObjRawDataDAO.save(espdMatObj);
 
         loggerAudit.send("Finishing processing the table " + espdMatObj.getSrcRealTable(), SubTypeIdAuditEvent.F0.name());
