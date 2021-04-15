@@ -36,7 +36,7 @@ public class EspdMatRawDataIncrementDAO {
     }
 
     public EspdMat findEspdMatToProcessByPackageSmd(String packageSmd) {
-//        loggerTech.send("Search package to process by packageSmd: " + packageSmd, SubTypeIdLoggingEvent.INFO.name());
+        loggerTech.send("Search package to process by packageSmd: " + packageSmd, SubTypeIdLoggingEvent.INFO.name());
         String sql = "SELECT * " +
                 "FROM raw_data_increment.espd_mat e\n" +
                 "WHERE e.package_smd = :packageSmd AND e.espd_status = 'ESPD_OK'\n" +
