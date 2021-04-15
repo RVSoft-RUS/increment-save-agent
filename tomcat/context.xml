@@ -30,16 +30,16 @@
     <Environment name="kafka/modeId" value="SBERBOARD-INCREMENT-SAVE-AGENT"
                  type="java.lang.String" override="false"/>
 
-    <Environment name="increment/cronExpression" value="*/20 * * ? * *"
-                 type="java.lang.String" override="false"/>
-
     <Environment name="logs/filePath" value="c:/Temp/"
                  type="java.lang.String" override="false"/>
 
     <Environment name="logs/arhSize" value="10M"
                  type="java.lang.String" override="false"/>
 
-    <Environment name="increment/mode/manual" value="ON"
+    <Environment name="increment/mode/manual" value="OFF"
+                 type="java.lang.String" override="false"/>
+
+    <Environment name="increment/manualMode/packageSmd" value="af50111b-90d2-484d-8fef-dd73e1da9974"
                  type="java.lang.String" override="false"/>
 
     <Environment name="increment/manualMode/packageSmd" value="af50111b-90d2-484d-8fef-dd73e1da9974"
