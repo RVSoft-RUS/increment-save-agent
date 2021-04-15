@@ -49,7 +49,7 @@ public class OperationsOnTablesRawDataDAO {
     @Transactional(value = "transactionManagerRawData", propagation = Propagation.REQUIRED)
     public void createTableIfNotExist(String tableName) {
         String sql = "CREATE TABLE IF NOT EXISTS raw_data." + tableName +
-                " AS SELECT * FROM raw_data_increment." + tableName;
+                " AS SELECT * FROM raw_data_increment." + tableName + " WITH NO DATA";
         jdbcTemplate.execute(sql);
     }
 
