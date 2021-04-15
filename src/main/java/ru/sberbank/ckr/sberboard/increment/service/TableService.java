@@ -19,6 +19,8 @@ import ru.sberbank.ckr.sberboard.increment.entity.IncrementState;
 import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateObjType;
 import ru.sberbank.ckr.sberboard.increment.entity.enums.IncrementStateStatus;
 import ru.sberbank.ckr.sberboard.increment.event.TableProcessedEvent;
+import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
+import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 import ru.sberbank.ckr.sberboard.increment.utils.Utils;
 
 import java.time.LocalDateTime;
@@ -39,6 +41,7 @@ public class TableService {
     private final EspdMatObjRawDataDAO espdMatObjRawDataDAO;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final SbBrdServiceAuditService loggerAudit;
+    private final SbBrdServiceLoggingService loggerTech;
 
 
     @Transactional(propagation = Propagation.NESTED, transactionManager = "transactionManagerRawData")
@@ -71,8 +74,22 @@ public class TableService {
             currentPageNum = i;
             Page<Map<String, Object>> dataList =
                     prepareDataForTransferService.findPaginated(tableName, PageRequest.of(currentPageNum, PAGE_SIZE), incrementForCurrentPackage);
+            if (i == 0) {
+                loggerTech.send("Join columns and data", SubTypeIdLoggingEvent.INFO.name());
+            }
+
             prepareDataForTransferService.joinColumnsAndData(preparedColumns, dataList.getContent());
-            transferDataService.upsert(tableName, preparedColumns);
+
+            if (i == 0) {
+                loggerTech.send("Create 'UPSERT' query  for table " + tableName, SubTypeIdLoggingEvent.INFO.name());
+            }
+
+            String sqlQuery = transferDataService.queryBuild(preparedColumns, tableName);
+
+            if (i == 0) {
+                loggerTech.send("Executing UPSERT: " + sqlQuery, SubTypeIdLoggingEvent.INFO.name());
+            }
+            transferDataService.upsert(preparedColumns, sqlQuery);
         }
 
         espdMatObjRawDataDAO.save(espdMatObj);

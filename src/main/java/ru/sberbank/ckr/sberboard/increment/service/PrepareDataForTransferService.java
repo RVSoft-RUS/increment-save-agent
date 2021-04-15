@@ -73,12 +73,10 @@ public class PrepareDataForTransferService {
                     .collect(Collectors.toList());
             primaryKeyMakerDAO.createPrimaryKeysOnTable(tableName, primaryKeys);
         }
-        loggerTech.send("Table " + tableName + " has primary keys " + primaryKeys.toString(), SubTypeIdLoggingEvent.INFO.name());
         return primaryKeys;
     }
 
     void joinColumnsAndData(List<Column> columnList, List<Map<String, Object>> dataList) {
-        loggerTech.send("Join columns and data", SubTypeIdLoggingEvent.INFO.name());
         final Map<String, List> colNames = columnList.stream().collect(Collectors.
                 toMap(column -> column.getColumnName(), column -> new ArrayList<>()));
 
