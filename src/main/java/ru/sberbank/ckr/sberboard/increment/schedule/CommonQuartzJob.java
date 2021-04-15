@@ -4,6 +4,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
 import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
@@ -22,6 +23,9 @@ import java.util.Map;
 public class CommonQuartzJob implements Job {
 
     private static final String manualMode = Utils.getJNDIValue("java:comp/env/increment/mode/manual");
+    private static final String manualModePackageSmd = Utils.getJNDIValue("java:comp/env/increment/manualMode/packageSmd");
+    private static volatile boolean isRunningOnManualMode = false;
+
     @Autowired
     private SaveIncrementService saveIncrementService;
     @Autowired
@@ -33,7 +37,6 @@ public class CommonQuartzJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        operationsOnTablesRawDataDAO.createColumnIncrPackRunIdIfNotExist("test");
         if (JobManualMode.OFF.toString()
                 .equals(manualMode)) {
             loggerAudit.send("Start IncrementService", SubTypeIdAuditEvent.F0.name());
@@ -45,7 +48,22 @@ public class CommonQuartzJob implements Job {
             }
             loggerAudit.send("Finish IncrementService", SubTypeIdAuditEvent.F0.name());
         } else {
-            //TODO Ручной запуск
+            if (isRunningOnManualMode) {
+                return;
+            }
+            isRunningOnManualMode = true;
+            loggerAudit.send("Start IncrementService in manual mode. " +
+                    "PackageSmd for processing: " + manualModePackageSmd, SubTypeIdAuditEvent.F0.name());
+            try {
+                final EspdMat espdMatForManual = saveIncrementService.getEspdMatByPackageSmd(manualModePackageSmd);
+                final List<EspdMatObj> espdMatObjsByEspdMat = saveIncrementService.getEspdMatObjsByEspdMat(espdMatForManual);
+                packageService.processPackage(espdMatForManual, espdMatObjsByEspdMat);
+            } catch (EmptyResultDataAccessException e) {
+                loggerAudit.send("0 packages found for PackageSmd " + manualModePackageSmd + ". " +
+                      "IncrementService stopped.", SubTypeIdAuditEvent.F0.name());
+            }
+            loggerAudit.send("IncrementService <manualMode> stopped.", SubTypeIdAuditEvent.F0.name());
+            System.exit(0);
         }
     }
 }

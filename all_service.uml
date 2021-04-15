@@ -3,47 +3,41 @@
   <ID>JAVA</ID>
   <OriginalElement>ru.sberbank.ckr.sberboard.increment.service</OriginalElement>
   <nodes>
-    <node x="1140.0" y="22.0">ru.sberbank.ckr.sberboard.increment.dao.rawdata.PrimaryKeyMakerDAO</node>
-    <node x="1488.0" y="0.0">ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao</node>
-    <node x="290.16477272727275" y="755.0">ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService</node>
-    <node x="1250.7064393939395" y="529.0">ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatRawDataDAO</node>
-    <node x="813.0000000000001" y="248.0">ru.sberbank.ckr.sberboard.increment.service.IncrementStateService</node>
-    <node x="1257.875" y="970.0">ru.sberbank.ckr.sberboard.increment.schedule.CommonQuartzJob</node>
-    <node x="1827.0" y="0.0">ru.sberbank.ckr.sberboard.increment.dao.rawdata.DataByTableNameRawDataDao</node>
-    <node x="1234.875" y="755.0">ru.sberbank.ckr.sberboard.increment.service.PackageService</node>
-    <node x="2659.630681818182" y="259.0">ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresCtlLoadingDao</node>
-    <node x="2336.630681818182" y="248.0">ru.sberbank.ckr.sberboard.increment.service.TransferDataService</node>
-    <node x="1841.09375" y="681.1875">ru.sberbank.ckr.sberboard.increment.service.TableService</node>
-    <node x="1880.1818181818182" y="248.0">ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatObjRawDataDAO</node>
-    <node x="1415.9318181818182" y="193.0">ru.sberbank.ckr.sberboard.increment.service.PrepareDataForTransferService</node>
-    <node x="406.0" y="540.0">ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatObjRawDataIncrementDAO</node>
-    <node x="2356.130681818182" y="22.0">ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresUpsertDao</node>
-    <node x="0.0" y="529.0">ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatRawDataIncrementDAO</node>
-    <node x="672.0000000000001" y="44.5">ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository</node>
+    <node x="1858.75" y="0.0">ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao</node>
+    <node x="170.5" y="799.0">ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService</node>
+    <node x="1801.25" y="562.0">ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatRawDataDAO</node>
+    <node x="715.25" y="259.0">ru.sberbank.ckr.sberboard.increment.service.IncrementStateService</node>
+    <node x="788.0828703703703" y="1014.0">ru.sberbank.ckr.sberboard.increment.schedule.CommonQuartzJob</node>
+    <node x="1410.25" y="799.0">ru.sberbank.ckr.sberboard.increment.service.PackageService</node>
+    <node x="1088.25" y="270.0">ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresCtlLoadingDao</node>
+    <node x="2269.25" y="259.0">ru.sberbank.ckr.sberboard.increment.service.TransferDataService</node>
+    <node x="1367.25" y="496.0">ru.sberbank.ckr.sberboard.increment.service.TableService</node>
+    <node x="1381.25" y="259.0">ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatObjRawDataDAO</node>
+    <node x="1787.25" y="193.0">ru.sberbank.ckr.sberboard.increment.service.PrepareDataForTransferService</node>
+    <node x="0.0" y="573.0">ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatObjRawDataIncrementDAO</node>
+    <node x="2288.75" y="22.0">ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresUpsertDao</node>
+    <node x="321.3467592592592" y="44.5">ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository</node>
+    <node x="407.0" y="562.0">ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatRawDataIncrementDAO</node>
   </nodes>
   <notes />
   <edges>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.TableService" target="ru.sberbank.ckr.sberboard.increment.service.TransferDataService">
-      <point x="76.0" y="-115.5" />
-      <point x="2169.25" y="444.0" />
-      <point x="2488.130681818182" y="444.0" />
+      <point x="165.5999999999999" y="-126.5" />
+      <point x="1739.85" y="476.0" />
+      <point x="2420.75" y="476.0" />
       <point x="0.0" y="60.5" />
     </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.PackageService" target="ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatRawDataDAO">
-      <point x="0.0" y="-82.5" />
-      <point x="1398.875" y="730.0" />
-      <point x="1443.7064393939395" y="730.0" />
+      <point x="109.33333333333326" y="-82.5" />
+      <point x="1683.5833333333333" y="774.0" />
+      <point x="1994.25" y="774.0" />
       <point x="0.0" y="60.5" />
     </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.schedule.CommonQuartzJob" target="ru.sberbank.ckr.sberboard.increment.service.PackageService">
-      <point x="0.0" y="-82.5" />
+      <point x="103.5" y="-93.5" />
+      <point x="1098.5828703703703" y="989.0" />
+      <point x="1574.25" y="989.0" />
       <point x="0.0" y="82.5" />
-    </edge>
-    <edge source="ru.sberbank.ckr.sberboard.increment.schedule.CommonQuartzJob" target="ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresCtlLoadingDao">
-      <point x="94.0" y="-82.5" />
-      <point x="1492.875" y="945.0" />
-      <point x="2864.380681818182" y="945.0" />
-      <point x="68.25" y="49.5" />
     </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.TransferDataService" target="ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresUpsertDao">
       <point x="0.0" y="-60.5" />
@@ -51,99 +45,77 @@
     </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.PackageService" target="ru.sberbank.ckr.sberboard.increment.service.IncrementStateService">
       <point x="-109.33333333333326" y="-82.5" />
-      <point x="1289.541666666667" y="730.0" />
-      <point x="901.2500000000001" y="730.0" />
+      <point x="1464.9166666666667" y="774.0" />
+      <point x="803.5" y="774.0" />
       <point x="-88.25" y="60.5" />
     </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.PrepareDataForTransferService" target="ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao">
-      <point x="0.0" y="-115.5" />
-      <point x="1627.4318181818182" y="168.0" />
-      <point x="1647.5" y="168.0" />
+      <point x="0.0" y="-126.5" />
       <point x="0.0" y="71.5" />
     </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.TableService" target="ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatObjRawDataDAO">
-      <point x="0.0" y="-115.5" />
-      <point x="2093.25" y="454.0" />
-      <point x="2073.181818181818" y="454.0" />
+      <point x="0.0" y="-126.5" />
       <point x="0.0" y="60.5" />
     </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.IncrementStateService" target="ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository">
       <point x="0.0" y="-60.5" />
-      <point x="989.5000000000001" y="168.0" />
-      <point x="1008.0000000000001" y="168.0" />
-      <point x="112.0" y="27.0" />
+      <point x="891.75" y="168.0" />
+      <point x="753.346759259259" y="168.0" />
+      <point x="143.99999999999977" y="27.0" />
     </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.TableService" target="ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresCtlLoadingDao">
-      <point x="152.0" y="-115.5" />
-      <point x="2245.25" y="454.0" />
-      <point x="2727.880681818182" y="454.0" />
-      <point x="-68.25" y="49.5" />
-    </edge>
-    <edge source="ru.sberbank.ckr.sberboard.increment.service.TableService" target="ru.sberbank.ckr.sberboard.increment.service.PrepareDataForTransferService">
-      <point x="-76.0" y="-115.5" />
-      <point x="2017.25" y="444.0" />
-      <point x="1627.4318181818182" y="444.0" />
-      <point x="0.0" y="115.5" />
-    </edge>
-    <edge source="ru.sberbank.ckr.sberboard.increment.service.PrepareDataForTransferService" target="ru.sberbank.ckr.sberboard.increment.dao.rawdata.DataByTableNameRawDataDao">
-      <point x="141.0" y="-115.5" />
-      <point x="1768.4318181818182" y="168.0" />
-      <point x="2077.0" y="168.0" />
-      <point x="0.0" y="71.5" />
-    </edge>
-    <edge source="ru.sberbank.ckr.sberboard.increment.schedule.CommonQuartzJob" target="ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService">
-      <point x="-94.0" y="-82.5" />
-      <point x="1304.875" y="945.0" />
-      <point x="516.1647727272727" y="945.0" />
-      <point x="0.0" y="82.5" />
-    </edge>
-    <edge source="ru.sberbank.ckr.sberboard.increment.service.TableService" target="ru.sberbank.ckr.sberboard.increment.service.IncrementStateService">
-      <point x="-152.0" y="-115.5" />
-      <point x="1941.25" y="454.0" />
-      <point x="1077.75" y="454.0" />
-      <point x="88.25" y="60.5" />
-    </edge>
-    <edge source="ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService" target="ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatObjRawDataIncrementDAO">
-      <point x="0.0" y="-82.5" />
-      <point x="516.1647727272727" y="730.0" />
-      <point x="599.0" y="730.0" />
+      <point x="-82.80000000000007" y="-126.5" />
+      <point x="1491.45" y="466.0" />
+      <point x="1224.75" y="466.0" />
       <point x="0.0" y="49.5" />
     </edge>
+    <edge source="ru.sberbank.ckr.sberboard.increment.service.TableService" target="ru.sberbank.ckr.sberboard.increment.service.PrepareDataForTransferService">
+      <point x="82.79999999999995" y="-126.5" />
+      <point x="1657.05" y="466.0" />
+      <point x="2018.25" y="466.0" />
+      <point x="0.0" y="126.5" />
+    </edge>
+    <edge source="ru.sberbank.ckr.sberboard.increment.service.TableService" target="ru.sberbank.ckr.sberboard.increment.service.IncrementStateService">
+      <point x="-165.60000000000014" y="-126.5" />
+      <point x="1408.6499999999999" y="476.0" />
+      <point x="980.0" y="476.0" />
+      <point x="88.25" y="60.5" />
+    </edge>
+    <edge source="ru.sberbank.ckr.sberboard.increment.schedule.CommonQuartzJob" target="ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService">
+      <point x="-103.5" y="-93.5" />
+      <point x="891.5828703703703" y="989.0" />
+      <point x="396.5" y="989.0" />
+      <point x="0.0" y="82.5" />
+    </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.PackageService" target="ru.sberbank.ckr.sberboard.increment.service.TableService">
-      <point x="109.33333333333326" y="-82.5" />
-      <point x="1508.2083333333335" y="730.0" />
-      <point x="2093.25" y="730.0" />
-      <point x="0.0" y="115.5" />
+      <point x="0.0" y="-82.5" />
+      <point x="0.0" y="126.5" />
     </edge>
-    <edge source="ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService" target="ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository">
-      <point x="150.66666666666663" y="-82.5" />
-      <point x="666.8314393939394" y="730.0" />
-      <point x="802.5000000000001" y="730.0" />
-      <point x="802.5000000000001" y="168.0" />
-      <point x="784.0000000000001" y="168.0" />
-      <point x="-112.0" y="27.0" />
-    </edge>
-    <edge source="ru.sberbank.ckr.sberboard.increment.service.PrepareDataForTransferService" target="ru.sberbank.ckr.sberboard.increment.dao.rawdata.PrimaryKeyMakerDAO">
-      <point x="-141.0" y="-115.5" />
-      <point x="1486.4318181818182" y="168.0" />
-      <point x="1304.0" y="168.0" />
+    <edge source="ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService" target="ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatObjRawDataIncrementDAO">
+      <point x="-150.66666666666652" y="-82.5" />
+      <point x="245.83333333333348" y="774.0" />
+      <point x="193.0" y="774.0" />
       <point x="0.0" y="49.5" />
     </edge>
     <edge source="ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService" target="ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.EspdMatRawDataIncrementDAO">
-      <point x="-150.66666666666663" y="-82.5" />
-      <point x="365.498106060606" y="730.0" />
-      <point x="193.0" y="730.0" />
+      <point x="150.66666666666652" y="-82.5" />
+      <point x="547.1666666666665" y="774.0" />
+      <point x="600.0" y="774.0" />
       <point x="0.0" y="60.5" />
     </edge>
+    <edge source="ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService" target="ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository">
+      <point x="0.0" y="-82.5" />
+      <point x="396.5" y="168.0" />
+      <point x="465.3467592592592" y="168.0" />
+      <point x="-144.0" y="27.0" />
+    </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.48265460030165913" x="1543.9390625" y="636.0" />
-  <SelectedNodes>
-    <node>ru.sberbank.ckr.sberboard.increment.service.TableService</node>
-  </SelectedNodes>
+  <settings layout="Hierarchic Group" zoom="0.3397608947165445" x="1286.5" y="600.5" />
+  <SelectedNodes />
   <Categories>
-    <Category>Fields</Category>
     <Category>Methods</Category>
     <Category>Inner Classes</Category>
+    <Category>Fields</Category>
   </Categories>
   <SCOPE>All</SCOPE>
   <VISIBILITY>private</VISIBILITY>

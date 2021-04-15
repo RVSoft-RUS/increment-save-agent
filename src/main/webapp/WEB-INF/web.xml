@@ -61,6 +61,11 @@
   </resource-env-ref>
 
   <resource-env-ref>
+    <resource-env-ref-name>increment/manualMode/packageSmd</resource-env-ref-name>
+    <resource-env-ref-type>java.lang.String</resource-env-ref-type>
+  </resource-env-ref>
+
+  <resource-env-ref>
     <resource-env-ref-name>increment/pagination/pageSize</resource-env-ref-name>
     <resource-env-ref-type>java.lang.String</resource-env-ref-type>
   </resource-env-ref>

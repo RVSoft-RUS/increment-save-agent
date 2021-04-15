@@ -38,6 +38,11 @@
     </resource-env-ref>
 
     <resource-env-ref>
+        <resource-env-ref-name>increment/manualMode/packageSmd</resource-env-ref-name>
+        <jndi-name>java:/env/increment/manualMode/packageSmd</jndi-name>
+    </resource-env-ref>
+
+    <resource-env-ref>
         <resource-env-ref-name>logs/filePath</resource-env-ref-name>
         <jndi-name>java:/env/logs/filePath</jndi-name>
     </resource-env-ref>

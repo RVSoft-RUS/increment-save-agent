@@ -17,6 +17,8 @@
 
     <Environment name="kafka/bootstrapServers" value="10.53.223.8:9092, 10.53.223.204:9092, 10.53.223.63:9092"
                  type="java.lang.String" override="false"/>
+<!--    <Environment name="kafka/bootstrapServers" value="10.53.223.8:9092, 10.53.223.204:9092, 10.53.223.63:9092"-->
+<!--                 type="java.lang.String" override="false"/>-->
     <!--TODO подставить корректный id приложения. Временно пользуемся id для Сервис преобразования-->
     <!--TODO id нашего приложения: incrservice-ser-4d39-8aec-c5fc1afddb5e-->
     <Environment name="kafka/appId" value="sbrdservice-ser-421a-b27e-817a2339cb54"
@@ -28,7 +30,7 @@
     <Environment name="kafka/modeId" value="SBERBOARD-INCREMENT-SAVE-AGENT"
                  type="java.lang.String" override="false"/>
 
-    <Environment name="increment/cronExpression" value="0 * * ? * *"
+    <Environment name="increment/cronExpression" value="*/20 * * ? * *"
                  type="java.lang.String" override="false"/>
 
     <Environment name="logs/filePath" value="c:/Temp/"
@@ -37,7 +39,10 @@
     <Environment name="logs/arhSize" value="10M"
                  type="java.lang.String" override="false"/>
 
-    <Environment name="increment/mode/manual" value="OFF"
+    <Environment name="increment/mode/manual" value="ON"
+                 type="java.lang.String" override="false"/>
+
+    <Environment name="increment/manualMode/packageSmd" value="af50111b-90d2-484d-8fef-dd73e1da9974"
                  type="java.lang.String" override="false"/>
 
     <Environment name="increment/pagination/pageSize" value="30"

@@ -78,4 +78,12 @@ public class SaveIncrementService {
         return espdMatObjRawDataIncrementDAO.findAllByPackageSmd(espdMat.getPackageSmd());
     }
 
+    public EspdMat getEspdMatByPackageSmd(String packageSmd) {
+        return espdMatRawDataIncrementDAO.findEspdMatToProcessByPackageSmd(packageSmd);
+    }
+
+    public List<EspdMatObj> getEspdMatObjsByEspdMat(EspdMat espdMat) {
+        return getEspdMatObjsForCurrentActualEspdMat(espdMat);
+    }
+
 }
