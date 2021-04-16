@@ -41,11 +41,6 @@
   </resource-env-ref>
 
   <resource-env-ref>
-    <resource-env-ref-name>increment/cronExpression</resource-env-ref-name>
-    <resource-env-ref-type>java.lang.String</resource-env-ref-type>
-  </resource-env-ref>
-
-  <resource-env-ref>
     <resource-env-ref-name>logs/filePath</resource-env-ref-name>
     <resource-env-ref-type>java.lang.String</resource-env-ref-type>
   </resource-env-ref>

@@ -28,11 +28,6 @@
     </resource-env-ref>
 
     <resource-env-ref>
-        <resource-env-ref-name>increment/cronExpression</resource-env-ref-name>
-        <jndi-name>java:/env/increment/cronExpression</jndi-name>
-    </resource-env-ref>
-
-    <resource-env-ref>
         <resource-env-ref-name>increment/mode/manual</resource-env-ref-name>
         <jndi-name>java:/env/increment/mode/manual</jndi-name>
     </resource-env-ref>

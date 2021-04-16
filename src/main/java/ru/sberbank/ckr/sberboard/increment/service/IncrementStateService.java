@@ -15,13 +15,10 @@ public class IncrementStateService {
     private final SbBrdServiceLoggingService loggerTech;
     private final IncrementStateRepository repository;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, transactionManager = "transactionManagerRawData")
+    @Transactional(transactionManager = "transactionManagerRawData")
     public IncrementState saveNewIncrementStates(IncrementState incrementState) {
         loggerTech.send("Save new incrementState " + incrementState.toString(), SubTypeIdLoggingEvent.INFO.name());
         return repository.save(incrementState);
     }
 
-    void updateIncrementState(IncrementState incrementState) {
-        repository.save(incrementState);
-    }
 }
