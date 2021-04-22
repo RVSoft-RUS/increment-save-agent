@@ -913,7 +913,6 @@ INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('CX_TXB_LOG_
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('CX_TXB_SCHEDULE', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('cx_txb_smeny', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_CONTACT_X', 'ROW_ID');
-INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_party', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_PER_COMM_ADDR', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('s_postn', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_PROD_INT', 'ROW_ID');
