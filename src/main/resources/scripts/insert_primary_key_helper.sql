@@ -3,6 +3,8 @@ INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT10', 
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT04', 'HEMPLOYEE+HABS+HDATEFROM');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT02', 'HEMPLOYEE+HTYPEVREM+CALDAY+HVRSTART');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM02', 'HEXPPERIO+HRPOSITION+HEMPLOYEE');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM21', 'HEXPORTID+HEXPPERIO');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM22', 'HEXPORTID+HEXPPERIO');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPA05', 'CALDAY+HEMPLOYEE');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('ECHI', 'ACD');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('Agroups', 'ACD_NO+ITEM_TYPE+ITEM_NAME+VALUE');
