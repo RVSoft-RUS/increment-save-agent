@@ -8,6 +8,7 @@ import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
 import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
+import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 import ru.sberbank.ckr.sberboard.increment.service.PackageService;
 import ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService;
 import ru.sberbank.ckr.sberboard.increment.utils.Utils;
@@ -36,7 +37,11 @@ public class ScheduledJob {
             Map<EspdMat, List<EspdMatObj>> espdMatObjsForAllActualEspdMat =
                     saveIncrementService.getEspdMatObjsForAllActualEspdMat();
             for (Map.Entry<EspdMat, List<EspdMatObj>> entry : espdMatObjsForAllActualEspdMat.entrySet()) {
-                packageService.processPackage(entry.getKey(), entry.getValue());
+                try {
+                    packageService.processPackage(entry.getKey(), entry.getValue());
+                } catch (Exception e) {
+                    loggerAudit.send(e.getMessage(), SubTypeIdLoggingEvent.INFO.name());
+                }
             }
             loggerAudit.send("Finish IncrementService", SubTypeIdAuditEvent.F0.name());
         } else {
