@@ -3,6 +3,8 @@ INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT10', 
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT04', 'HEMPLOYEE+HABS+HDATEFROM');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT02', 'HEMPLOYEE+HTYPEVREM+CALDAY+HVRSTART');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM02', 'HEXPPERIO+HRPOSITION+HEMPLOYEE');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM21', 'HEXPORTID+HEXPPERIO');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM22', 'HEXPORTID+HEXPPERIO');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPA05', 'CALDAY+HEMPLOYEE');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('ECHI', 'ACD');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('Agroups', 'ACD_NO+ITEM_TYPE+ITEM_NAME+VALUE');
@@ -913,7 +915,6 @@ INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('CX_TXB_LOG_
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('CX_TXB_SCHEDULE', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('cx_txb_smeny', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_CONTACT_X', 'ROW_ID');
-INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_party', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_PER_COMM_ADDR', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('s_postn', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_PROD_INT', 'ROW_ID');
