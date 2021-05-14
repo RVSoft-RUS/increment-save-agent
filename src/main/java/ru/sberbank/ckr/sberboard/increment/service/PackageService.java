@@ -41,7 +41,7 @@ public class PackageService {
         incrementForCurrentPackage.setPackageSmd(espdMat.getPackageSmd());
         incrementForCurrentPackage.setSubscrId(espdMat.getSubscrId());
         incrementForCurrentPackage.setObjType(IncrementStateObjType.PACKAGE);
-        incrementForCurrentPackage.setObjsInPack(espdMat.getObjs());
+        incrementForCurrentPackage.setObjsInPack(espdMatObjs.size());
         incrementForCurrentPackage.setWorkflowEndDt(espdMat.getWorkflowEndDt());
         applicationEventPublisher.publishEvent(new PackageProcessedEvent(incrementForCurrentPackage));
 

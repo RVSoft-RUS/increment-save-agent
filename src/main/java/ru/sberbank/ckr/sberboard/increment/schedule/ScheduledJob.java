@@ -1,6 +1,8 @@
 package ru.sberbank.ckr.sberboard.increment.schedule;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class ScheduledJob {
     private final SaveIncrementService saveIncrementService;
     private final PackageService packageService;
     private final SbBrdServiceAuditService loggerAudit;
+    private final ApplicationContext context;
 
     @Scheduled(fixedDelay = 15 * 60 * 1000)
     public void execute() {
@@ -56,11 +59,12 @@ public class ScheduledJob {
                 final List<EspdMatObj> espdMatObjsByEspdMat = saveIncrementService.getEspdMatObjsByEspdMat(espdMatForManual);
                 packageService.processPackage(espdMatForManual, espdMatObjsByEspdMat);
             } catch (EmptyResultDataAccessException e) {
-                loggerAudit.send("0 packages found for PackageSmd " + manualModePackageSmd + ". " +
-                        "IncrementService stopped.", SubTypeIdAuditEvent.F0.name());
+                loggerAudit.send("0 packages found for PackageSmd " + manualModePackageSmd + ". ", SubTypeIdAuditEvent.F0.name());
+            } catch (Throwable t) {
+                loggerAudit.send("Unknown exception: " + t.getMessage(), SubTypeIdAuditEvent.F0.name());
             }
             loggerAudit.send("IncrementService <manualMode> stopped.", SubTypeIdAuditEvent.F0.name());
-            System.exit(0);
+            ((ConfigurableApplicationContext) context).close();
         }
     }
 
