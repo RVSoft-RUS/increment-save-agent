@@ -75,7 +75,7 @@ public class SaveIncrementService {
             loggerTech.send(LocalDateTime.now() + ": The package'" + incrementStates.getPackageSmd() + "' has already been processed with end_date " + incrementStates.getEndDt(), SubTypeIdLoggingEvent.INFO.name());
             return null;
         }    //У нас не рассмотрен случай, если incrementStates = null
-        loggerTech.send("The package '" + espdMat.getSubscrId() + "' ready to process", SubTypeIdLoggingEvent.INFO.name());
+        loggerTech.send("The package '" + espdMat.getPackageSmd() + "' of subscribe id '" + espdMat.getSubscrId() + "' ready to process", SubTypeIdLoggingEvent.INFO.name());
 
         return espdMatObjRawDataIncrementDAO.findAllByPackageSmd(espdMat.getPackageSmd());
     }
