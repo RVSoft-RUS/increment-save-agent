@@ -1,12 +1,12 @@
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPD02', 'HEMPLOYEE+CALYEAR');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT10', 'HEMPLOYEE+HDATEFROM+HDATETO');
-INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT04', 'HEMPLOYEE+HABS+HDATEFROM');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT04', 'HEMPLOYEE+HABS+HDATEFROM+HDATETO+SEQNR+HSPRPS');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPT02', 'HEMPLOYEE+HTYPEVREM+CALDAY+HVRSTART');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM02', 'HEXPPERIO+HRPOSITION+HEMPLOYEE');
-INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM21', 'HEXPORTID+HEXPPERIO');
-INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM22', 'HEXPORTID+HEXPPERIO');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM21', 'OTYPE+OBJID+BEGDA+ENDDA');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRAROM22', 'OTYPE+OBJID+BEGDA+ENDDA+SUBTY+SCLAS+SOBID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('HRARPA05', 'CALDAY+HEMPLOYEE');
-INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('ECHI', 'ACD');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('ECHI', 'CALLID+SEGMENT+SEGSTOP');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('Agroups', 'ACD_NO+ITEM_TYPE+ITEM_NAME+VALUE');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('hagent', 'ROW_DATE+ACD+SPLIT');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('hsplit', 'ROW_DATE+ACD+SPLIT+CTL_FILENAME');
@@ -27,7 +27,7 @@ INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('requested_s
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('scenario_steps_counters', 'id');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('service_in_time_counters', 'id');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('surveys', 'interaction_id');
-INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('SBREQUESTM1', 'NUMBER');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('SBREQUESTM1', 'NUMBER_');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('ALARMEVENT', 'ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('ALARMPRIORITY', 'ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('ALARMPROFILE', 'ID');
@@ -908,7 +908,7 @@ INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('CX_SR_CONCL
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('cx_sr_emp', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('cx_sr_expertise', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('cx_txb_call_jrn', 'ROW_ID');
-INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('cx_txb_evt', 'ROW_ID+X_EXPERTICE_ID');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('cx_txb_evt', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('CX_TXB_HIST', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('cx_txb_list_lvl', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('CX_TXB_LOG_STAT', 'ROW_ID');
@@ -923,6 +923,6 @@ INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_USER', 'R
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('cx_txb_time_off', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('CX_LEAD_COMMENT', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_EVT_ACT', 'ROW_ID');
-INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_ACT_PRDINT ', 'ROW_ID');
+INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_ACT_PRDINT', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_OPTY', 'ROW_ID');
 INSERT INTO raw_data.primary_key_helper(table_name, p_keys) VALUES ('S_REVN', 'ROW_ID');
