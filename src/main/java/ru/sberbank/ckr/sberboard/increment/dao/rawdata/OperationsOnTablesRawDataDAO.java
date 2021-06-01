@@ -27,7 +27,7 @@ public class OperationsOnTablesRawDataDAO {
      */
     @Transactional("transactionManagerRawData")
     public void createPrimaryKeysOnTable(@NotNull String tableName, @NotNull List<String> columns) {
-        loggerTech.send("Create primary keys: "+columns.toString()+" for table "+tableName, SubTypeIdLoggingEvent.INFO.name());
+        loggerTech.send("Creating primary keys: "+columns.toString()+" for table "+tableName, SubTypeIdLoggingEvent.INFO.name());
         StringBuilder columnsStr = new StringBuilder();
         columns.forEach(column -> columnsStr.append(column).append(","));
         columnsStr.deleteCharAt(columnsStr.length() - 1);
@@ -47,6 +47,8 @@ public class OperationsOnTablesRawDataDAO {
      */
     @Transactional(value = "transactionManagerRawData", propagation = Propagation.REQUIRED)
     public void createTableIfNotExist(String tableName) {
+        loggerTech.send("Creating table "+ tableName + " in RAW_DATA schema", SubTypeIdLoggingEvent.INFO.name());
+
         String sql = "CREATE TABLE IF NOT EXISTS raw_data." + tableName +
                 " AS SELECT * FROM raw_data_increment." + tableName + " WITH NO DATA";
         jdbcTemplate.execute(sql);
@@ -60,6 +62,8 @@ public class OperationsOnTablesRawDataDAO {
      */
     @Transactional(value = "transactionManagerRawData", propagation = Propagation.REQUIRED)
     public void createColumnIncrPackRunIdIfNotExist(String tableName) {
+        loggerTech.send("Adding INCR_PACK_RUN_ID colunn into " + tableName + " table", SubTypeIdLoggingEvent.INFO.name());
+
         String sql = "ALTER TABLE raw_data." + tableName +
                     " ADD COLUMN IF NOT EXISTS incr_pack_run_id bigint";
         jdbcTemplate.execute(sql);
