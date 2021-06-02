@@ -8,6 +8,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
 import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
+import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresTablesInfoDao;
+import ru.sberbank.ckr.sberboard.increment.entity.Column;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
 import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
@@ -30,10 +32,12 @@ public class ScheduledJob {
     private final PackageService packageService;
     private final SbBrdServiceAuditService loggerAudit;
     private final ApplicationContext context;
+    private final JdbcPostgresTablesInfoDao jdbcPostgresTablesInfoDao;
 
     @Scheduled(fixedDelay = 15 * 60 * 1000)
     public void execute() {
-        if (JobManualMode.OFF.toString()
+        if (JobManualMode.
+                OFF.toString()
                 .equals(manualMode)) {
             loggerAudit.send("Start IncrementService", SubTypeIdAuditEvent.F0.name());
 

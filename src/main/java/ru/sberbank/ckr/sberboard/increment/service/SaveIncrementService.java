@@ -13,6 +13,7 @@ import ru.sberbank.ckr.sberboard.increment.logging.SbBrdServiceLoggingService;
 import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 import ru.sberbank.ckr.sberboard.increment.repository.IncrementStateRepository;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,15 +65,16 @@ public class SaveIncrementService {
                 espdMat.getSubscrId(),
                 IncrementStateObjType.PACKAGE
         );
-        if (incrementStates != null && (
-                incrementStates.getIncrementationState() == IncrementStateStatus.PACKAGE_PROCESSED_SUCCESSFULLY.status
-                        || incrementStates.getIncrementationState() == IncrementStateStatus.PACKAGE_IN_PROCESS.status)
+        if (incrementStates != null && (incrementStates.getIncrementationState()
+                .equals(IncrementStateStatus.PACKAGE_PROCESSED_SUCCESSFULLY.status)
+                        || incrementStates.getIncrementationState()
+                .equals(IncrementStateStatus.PACKAGE_IN_PROCESS.status))
                 && (incrementStates.getWorkflowEndDt().isAfter(espdMat.getWorkflowEndDt())
                 || incrementStates.getWorkflowEndDt().isEqual(espdMat.getWorkflowEndDt()))) {
 
-            loggerTech.send("The package'" + incrementStates.getPackageSmd() + "' has already been processed", SubTypeIdLoggingEvent.INFO.name());
+            loggerTech.send(LocalDateTime.now() + ": The package'" + incrementStates.getPackageSmd() + "' has already been processed with end_date " + incrementStates.getEndDt(), SubTypeIdLoggingEvent.INFO.name());
             return null;
-        }
+        }    //У нас не рассмотрен случай, если incrementStates = null
         loggerTech.send("The package '" + espdMat.getSubscrId() + "' ready to process", SubTypeIdLoggingEvent.INFO.name());
 
         return espdMatObjRawDataIncrementDAO.findAllByPackageSmd(espdMat.getPackageSmd());

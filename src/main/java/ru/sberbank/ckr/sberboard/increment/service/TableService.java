@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
 import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresCtlLoadingDao;
+import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresTablesInfoDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.EspdMatObjRawDataDAO;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.OperationsOnTablesRawDataDAO;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.DataByTableNameRawDataIncrementDao;
@@ -44,14 +45,17 @@ public class TableService {
     private final SbBrdServiceAuditService loggerAudit;
     private final SbBrdServiceLoggingService loggerTech;
     private final DataByTableNameRawDataIncrementDao dataByTableNameRawDataIncrementDao;
+    private final JdbcPostgresTablesInfoDao jdbcPostgresTablesInfoDao;
 
 
     @Transactional(propagation = Propagation.NESTED, transactionManager = "transactionManagerRawData")
     void processTable(EspdMatObj espdMatObj, EspdMat espdMat, IncrementState incrementForCurrentPackage) {
-
-        loggerAudit.send("Starting processing the table " + espdMatObj.getSrcRealTable(), SubTypeIdAuditEvent.F0.name());
-
         String tableName = espdMatObj.getSrcRealTable();
+        loggerAudit.send("Starting processing the table " + tableName +
+                " with size: " + jdbcPostgresTablesInfoDao.getTableSizeAsString(tableName) +
+                " and " + jdbcPostgresTablesInfoDao.getColumnsCountFromTable(tableName) +
+                " fields in the table.", SubTypeIdAuditEvent.F0.name());
+
         IncrementState incrementStateForCurrentTable = IncrementState.builder()
                 .packageSmd(espdMatObj.getPackageSmd())
                 .subscrId(espdMatObj.getSubscrId())

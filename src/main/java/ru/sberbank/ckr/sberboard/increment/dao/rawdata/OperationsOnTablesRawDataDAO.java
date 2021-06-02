@@ -3,7 +3,6 @@ package ru.sberbank.ckr.sberboard.increment.dao.rawdata;
 
 import lombok.RequiredArgsConstructor;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
