@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresColumnInfoDao;
+import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresTablesInfoDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement.DataByTableNameRawDataIncrementDao;
 import ru.sberbank.ckr.sberboard.increment.dao.rawdata.OperationsOnTablesRawDataDAO;
 import ru.sberbank.ckr.sberboard.increment.entity.Column;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PrepareDataForTransferService {
 
-    private final JdbcPostgresColumnInfoDao jdbcPostgresColumnInfoDao;
+    private final JdbcPostgresTablesInfoDao jdbcPostgresTablesInfoDao;
     private final OperationsOnTablesRawDataDAO primaryKeyMakerDAO;
     private final SbBrdServiceLoggingService loggerTech;
     private final DataByTableNameRawDataIncrementDao dataByTableNameRawDataDao;
@@ -34,7 +34,7 @@ public class PrepareDataForTransferService {
     public List<Column> getColumns(String tableName) {
 
         final List<String> primaryKeys = getPrimaryKeys(tableName);
-        List<Column> columnList = jdbcPostgresColumnInfoDao.getColumnNamesFromTable(tableName);
+        List<Column> columnList = jdbcPostgresTablesInfoDao.getColumnNamesFromTable(tableName);
         columnList.forEach(column -> column.setPrimaryKey(primaryKeys.contains(column.getColumnName())));
         addIncrRunPackIdColumn(columnList);
         return columnList;
@@ -64,11 +64,11 @@ public class PrepareDataForTransferService {
     }
 
     private List<String> getPrimaryKeys(String tableName) {
-        List<String> primaryKeys = jdbcPostgresColumnInfoDao.getPrimaryKeys(tableName);
+        List<String> primaryKeys = jdbcPostgresTablesInfoDao.getPrimaryKeys(tableName);
         if (primaryKeys.size() == 0) {
             loggerTech.send(tableName + " doesn't have primary key", SubTypeIdLoggingEvent.INFO.name());
             primaryKeys = Arrays
-                    .stream(jdbcPostgresColumnInfoDao.getPrimaryKeysFromHelper(tableName)
+                    .stream(jdbcPostgresTablesInfoDao.getPrimaryKeysFromHelper(tableName)
                             .split("\\+")).map(String::trim)
                     .collect(Collectors.toList());
             primaryKeyMakerDAO.createPrimaryKeysOnTable(tableName, primaryKeys);
