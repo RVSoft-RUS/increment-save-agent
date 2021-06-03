@@ -42,7 +42,7 @@
     <Environment name="increment/manualMode/packageSmd" value=""
                  type="java.lang.String" override="false"/>
 
-    <Environment name="increment/pagination/pageSize" value="30"
+    <Environment name="increment/memoryAvailable" value="1024"
                  type="java.lang.String" override="false"/>
 
 </Context>

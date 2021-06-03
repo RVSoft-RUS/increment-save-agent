@@ -34,7 +34,7 @@ public class JdbcPostgresTablesInfoDao {
     }
 
     public List<Column> getColumnNamesFromTable(String table) {
-        loggerTech.send("Get column names from table "+table, SubTypeIdLoggingEvent.INFO.name());
+        loggerTech.send("Get column names from table " + table, SubTypeIdLoggingEvent.INFO.name());
 
         String sqlGetColumns = "select * \n" +
                 "from information_schema.columns\n" +
@@ -56,17 +56,50 @@ public class JdbcPostgresTablesInfoDao {
     }
 
     /**
-     *
      * @param tableName имя таблицы <b>в схеме raw_data</b>
-     * @return String Строка с единицами измерения KB, MB, GB или TB
+     * @return String Строка с единицами измерения KB, MB, GB или TB. Для несуществующей
+     * таблицы возвращает 0.
      */
     public String getTableSizeAsString(String tableName) {
-        try {
-            String sqlGetTableSize = "SELECT pg_size_pretty(pg_total_relation_size('raw_data." + tableName + "'))";
-            return jdbcTemplate.queryForObject(sqlGetTableSize, String.class);
-        } catch (Exception e) {
-            return "Error (" + e.getCause().getMessage() + ")";
-        }
-
+        String sqlGetTableSize = "SELECT pg_size_pretty(cast(" + getTableSize(tableName) + " as BIGINT))";
+        return jdbcTemplate.queryForObject(sqlGetTableSize, String.class);
     }
+
+    /**
+     * @param tableName имя таблицы <b>в схеме raw_data</b>
+     * @return Long Размер таблицы в байтах с учетом индексов и т. д. Для несуществующей
+     * таблицы возвращает 0.
+     */
+    public Long getTableSize(String tableName) {
+        try {
+            String sqlGetTableSize = "SELECT pg_total_relation_size('raw_data." + tableName + "')";
+            return jdbcTemplate.queryForObject(sqlGetTableSize, Long.class);
+        } catch (Exception e) {
+            return 0L;
+        }
+    }
+
+    /**
+     * @param tableName имя таблицы <b>в схеме raw_data</b>
+     * @return Long Количество записей в таблице. Для несуществующей
+     * таблицы возвращает 0.
+     */
+    public Long getNumberOfEntries(String tableName) {
+        try {
+            String sqlGetNumberOfEntries = "SELECT count(*) from raw_data." + tableName;
+            return jdbcTemplate.queryForObject(sqlGetNumberOfEntries, Long.class);
+        } catch (Exception e) {
+            return 0L;
+        }
+    }
+
+    //Для дебага метод
+    public List<String> getAllTablesFromRawData() {
+        String sqlGetColumns = "select table_name " +
+                "from information_schema.tables " +
+                "where table_schema = 'raw_data'";
+
+        return jdbcTemplate.queryForList(sqlGetColumns, String.class);
+    }
+
 }

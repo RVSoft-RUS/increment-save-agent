@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import ru.sberbank.ckr.sberboard.increment.audit.SbBrdServiceAuditService;
 import ru.sberbank.ckr.sberboard.increment.audit.SubTypeIdAuditEvent;
 import ru.sberbank.ckr.sberboard.increment.dao.JdbcPostgresTablesInfoDao;
-import ru.sberbank.ckr.sberboard.increment.entity.Column;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMat;
 import ru.sberbank.ckr.sberboard.increment.entity.EspdMatObj;
 import ru.sberbank.ckr.sberboard.increment.logging.SubTypeIdLoggingEvent;
 import ru.sberbank.ckr.sberboard.increment.service.PackageService;
 import ru.sberbank.ckr.sberboard.increment.service.SaveIncrementService;
+import ru.sberbank.ckr.sberboard.increment.service.TableService;
 import ru.sberbank.ckr.sberboard.increment.utils.Utils;
 
 import java.util.List;
@@ -33,12 +33,24 @@ public class ScheduledJob {
     private final SbBrdServiceAuditService loggerAudit;
     private final ApplicationContext context;
     private final JdbcPostgresTablesInfoDao jdbcPostgresTablesInfoDao;
+    private final TableService tableService;
 
     @Scheduled(fixedDelay = 15 * 60 * 1000)
     public void execute() {
-        if (JobManualMode.
-                OFF.toString()
-                .equals(manualMode)) {
+//
+//        long MA = 1024;
+//        String tableName = "s_srv_req";
+//        System.out.println(jdbcPostgresTablesInfoDao.getTableSize(tableName));
+//        System.out.println(jdbcPostgresTablesInfoDao.getTableSizeAsString(tableName));
+//        List<String> tables = jdbcPostgresTablesInfoDao.getAllTablesFromRawData();
+//
+//        for (String table : tables) {
+//            int pageSize = tableService.getPageSize(table);
+//            System.out.println(table + ": " + pageSize);
+//        }
+//
+
+        if (JobManualMode.OFF.toString().equals(manualMode)) {
             loggerAudit.send("Start IncrementService", SubTypeIdAuditEvent.F0.name());
 
             Map<EspdMat, List<EspdMatObj>> espdMatObjsForAllActualEspdMat =

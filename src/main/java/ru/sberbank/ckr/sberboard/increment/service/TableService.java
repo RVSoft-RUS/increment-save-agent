@@ -33,7 +33,8 @@ import java.util.Map;
 @Component
 public class TableService {
 
-    private static final int PAGE_SIZE = Integer.parseInt(Utils.getJNDIValue("java:comp/env/increment/pagination/pageSize"));
+    private static final long MEMORY_AVAILABLE  = 1024 * 1024 * Integer.parseInt(Utils.getJNDIValue("java:comp/env/increment/memoryAvailable"));
+    private static final int MAX_PAGE_SIZE  = 50_000;
 
     private final OperationsOnTablesRawDataDAO operationsOnTablesRawDataDAO;
     private final TransferDataService transferDataService;
@@ -74,18 +75,20 @@ public class TableService {
         operationsOnTablesRawDataDAO.createTableIfNotExist(tableName);
         operationsOnTablesRawDataDAO.createColumnIncrPackRunIdIfNotExist(tableName);
 
+        int pageSize = getPageSize(tableName);
+
         List<Column> preparedColumns = prepareDataForTransferService.getColumns(tableName);
         int currentPageNum;
         int countRows = dataByTableNameRawDataIncrementDao.getCountByTableName(tableName);
-        int countPages = prepareDataForTransferService.findPagesCount(tableName, PAGE_SIZE);
+        int countPages = prepareDataForTransferService.findPagesCount(tableName, pageSize);
         loggerTech.send("Start transfer data to raw_data." + tableName +
                         ". Count rows in table: " + countRows +
-                        ". Count pages: " + countPages + ". Page size: " + PAGE_SIZE,
+                        ". Count pages: " + countPages + ". Page size: " + pageSize,
                 SubTypeIdLoggingEvent.INFO.name());
         for (int i = 0; i < countPages; i++) {
             currentPageNum = i;
             Page<Map<String, Object>> dataList =
-                    prepareDataForTransferService.findPaginated(tableName, PageRequest.of(currentPageNum, PAGE_SIZE), incrementForCurrentPackage);
+                    prepareDataForTransferService.findPaginated(tableName, PageRequest.of(currentPageNum, pageSize), incrementForCurrentPackage);
             prepareDataForTransferService.joinColumnsAndData(preparedColumns, dataList.getContent());
             String sqlQuery = transferDataService.queryBuild(preparedColumns, tableName);
             transferDataService.upsert(preparedColumns, sqlQuery);
@@ -96,4 +99,10 @@ public class TableService {
 
     }
 
+    private int getPageSize(String tableName) {
+        long tableSize = jdbcPostgresTablesInfoDao.getTableSize(tableName);
+        long numberOfEntries = jdbcPostgresTablesInfoDao.getNumberOfEntries(tableName);
+        int pageSize = (int) (numberOfEntries * MEMORY_AVAILABLE / tableSize);
+        return Math.max(Math.min(pageSize, MAX_PAGE_SIZE), 1) ;
+    }
 }
