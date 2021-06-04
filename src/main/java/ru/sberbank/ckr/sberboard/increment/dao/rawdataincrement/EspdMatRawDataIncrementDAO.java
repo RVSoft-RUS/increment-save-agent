@@ -1,6 +1,7 @@
 package ru.sberbank.ckr.sberboard.increment.dao.rawdataincrement;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,14 @@ public class EspdMatRawDataIncrementDAO {
                 "WHERE e.subscr_id = :subscrId AND e.espd_status = 'ESPD_OK'\n" +
                 "ORDER BY e.workflow_end_dt DESC\n" +
                 "LIMIT 1";
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("subscrId", subscrId);
-        return namedParameterJdbcTemplate.queryForObject(sql, parameters, new EspdMat.EspdMatMapper());
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            parameters.addValue("subscrId", subscrId);
+            return namedParameterJdbcTemplate.queryForObject(sql, parameters, new EspdMat.EspdMatMapper());
+        } catch (EmptyResultDataAccessException e) {
+            loggerTech.send("No actual packages found by subscribe id: " + subscrId, SubTypeIdLoggingEvent.INFO.name());
+            return null;
+        }
     }
 
     public EspdMat findEspdMatToProcessByPackageSmd(String packageSmd) {
