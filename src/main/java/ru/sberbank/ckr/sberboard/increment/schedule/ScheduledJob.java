@@ -59,7 +59,7 @@ public class ScheduledJob {
                 try {
                     packageService.processPackage(entry.getKey(), entry.getValue());
                 } catch (Exception e) {
-                    loggerAudit.send(e.getMessage(), SubTypeIdLoggingEvent.INFO.name());
+                    loggerAudit.send(e.getMessage(), SubTypeIdAuditEvent.F0.name());
                 }
             }
             loggerAudit.send("Finish IncrementService", SubTypeIdAuditEvent.F0.name());

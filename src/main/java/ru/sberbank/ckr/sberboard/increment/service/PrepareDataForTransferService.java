@@ -45,6 +45,18 @@ public class PrepareDataForTransferService {
         return (int) Math.ceil(dataByTableNameRawDataDao.getCountByTableName(tableName) * 1.0 / pageSize);
     }
 
+    public int findPagesCountWithMaxCtlLoadingAndValidfrom(String tableName, int pageSize) {
+        return (int) Math.ceil(dataByTableNameRawDataDao.getCountByTableNameWithMaxCtlLoadingAndValidfrom(tableName, getPrimaryKeys(tableName)) * 1.0 / pageSize);
+    }
+
+    public int getCount(String tableName){
+        return dataByTableNameRawDataDao.getCountByTableName(tableName);
+    }
+
+    public int getCountWithMaxCtlLoadingAndValidfrom(String tableName){
+        return dataByTableNameRawDataDao.getCountByTableNameWithMaxCtlLoadingAndValidfrom(tableName, getPrimaryKeys(tableName));
+    }
+
     public Page<Map<String, Object>> findPaginated(String tableName, Pageable pageable, IncrementState incrementForCurrentPackage) {
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
@@ -57,7 +69,25 @@ public class PrepareDataForTransferService {
         if (dataCount < startItem) {
             dataList = Collections.emptyList();
         } else {
-            dataList = dataByTableNameRawDataDao.getDataFromTablePaginated(tableName, primaryKeys, startItem, pageSize, incrementForCurrentPackage);
+            dataList = dataByTableNameRawDataDao.getPaginatedDataFromTable(tableName, primaryKeys, startItem, pageSize, incrementForCurrentPackage);
+        }
+
+        return new PageImpl<>(dataList, PageRequest.of(currentPage, pageSize), dataCount);
+    }
+
+    public Page<Map<String, Object>> findPaginatedWithMaxCtlLoadingAndValidfrom(String tableName, Pageable pageable, IncrementState incrementForCurrentPackage) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+
+        List<String> primaryKeys = getPrimaryKeys(tableName);
+        int dataCount = dataByTableNameRawDataDao.getCountByTableNameWithMaxCtlLoadingAndValidfrom(tableName, primaryKeys);
+        List<Map<String, Object>> dataList;
+
+        if (dataCount < startItem) {
+            dataList = Collections.emptyList();
+        } else {
+            dataList = dataByTableNameRawDataDao.getPaginatedDataFromTableWithMaxCtlLoadingAndValidFrom(tableName, primaryKeys, startItem, pageSize, incrementForCurrentPackage);
         }
 
         return new PageImpl<>(dataList, PageRequest.of(currentPage, pageSize), dataCount);

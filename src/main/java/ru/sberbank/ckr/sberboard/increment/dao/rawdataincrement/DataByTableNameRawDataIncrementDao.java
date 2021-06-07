@@ -22,11 +22,11 @@ public class DataByTableNameRawDataIncrementDao {
         return jdbcTemplate.queryForList(sql);
     }
 
-    public List<Map<String, Object>> getDataFromTablePaginated(String table, List<String> primaryKeys, int startItem, int pageSize, IncrementState incrementForCurrentPackage) {
+    public List<Map<String, Object>> getPaginatedDataFromTable(String table, List<String> primaryKeys, int startItem, int pageSize, IncrementState incrementForCurrentPackage) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String keyForOrderBy = String.join(",", primaryKeys);
+        String primaryKeyString = String.join(",", primaryKeys);
 
-        parameters.addValue("primaryKeys", keyForOrderBy);
+        parameters.addValue("primaryKeys", primaryKeyString);
         parameters.addValue("startItem", startItem);
         parameters.addValue("pageSize", pageSize);
 
@@ -35,8 +35,34 @@ public class DataByTableNameRawDataIncrementDao {
         return namedParameterJdbcTemplate.queryForList(sql, parameters);
     }
 
+    public List<Map<String, Object>> getPaginatedDataFromTableWithMaxCtlLoadingAndValidFrom(String table, List<String> primaryKeys, int startItem, int pageSize, IncrementState incrementForCurrentPackage) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String primaryKeyString = String.join(",", primaryKeys);
+
+        parameters.addValue("primaryKeys", primaryKeyString);
+        parameters.addValue("startItem", startItem);
+        parameters.addValue("pageSize", pageSize);
+
+        String sql = "SELECT curtable.*, " + incrementForCurrentPackage.getIncrPackRunId() + " as INCR_PACK_RUN_ID" +
+                " FROM " +
+                " (select *, row_number() over (partition by " + primaryKeyString + " order by CTL_LOADING desc, ctl_validfrom  desc) as rownum\n" +
+                " FROM RAW_DATA_INCREMENT." + table + " ) as curtable " +
+                " WHERE rownum = 1 " +
+                " ORDER BY :primaryKeys LIMIT :pageSize OFFSET :startItem;";
+        return namedParameterJdbcTemplate.queryForList(sql, parameters);
+    }
+
     public Integer getCountByTableName(String table) {
         String sql = "select count(*) from raw_data_increment." + table;
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
+
+    public Integer getCountByTableNameWithMaxCtlLoadingAndValidfrom(String table, List<String> primaryKeys) {
+        String primaryKeyString = String.join(",", primaryKeys);
+        String sql =    "select count(curtable.*) " +
+                        "from (  select *, row_number() over (partition by " + primaryKeyString + " order by CTL_LOADING desc, ctl_validfrom desc) as rownum " +
+                        "        from raw_data_increment." + table + ") curtable " +
+                        " where rownum = 1;";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
 

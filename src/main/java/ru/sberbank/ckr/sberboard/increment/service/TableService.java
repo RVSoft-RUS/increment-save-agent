@@ -78,16 +78,33 @@ public class TableService {
         operationsOnTablesRawDataDAO.createColumnIncrPackRunIdIfNotExist(tableName);
 
         int pageSize = getPageSize(tableName);
-
         List<Column> preparedColumns = prepareDataForTransferService.getColumns(tableName);
-        int currentPageNum;
-        int countRows = dataByTableNameRawDataIncrementDao.getCountByTableName(tableName);
+
+        int count = prepareDataForTransferService.getCount(tableName);
+        int countWithMaxCtlLoadingAndValidfrom = prepareDataForTransferService.getCountWithMaxCtlLoadingAndValidfrom(tableName);
+        if (count == countWithMaxCtlLoadingAndValidfrom) {
+            processDataWithPagination(tableName, pageSize, preparedColumns, incrementStateForCurrentTable);
+        } else {
+            loggerTech.send("Table " + tableName + " have duplicated rows, trying to exclude duplicates with CTL_LOADING and CTL_VALIDFROM",
+                    SubTypeIdLoggingEvent.INFO.name());
+            processDataWithPaginationWithMaxCtlLoadingAndValidFrom(tableName, pageSize, preparedColumns, incrementForCurrentPackage);
+
+        }
+
+        espdMatObjRawDataDAO.save(espdMatObj);
+
+        loggerAudit.send("Finishing processing the table " + espdMatObj.getSrcRealTable(), SubTypeIdAuditEvent.F0.name());
+
+    }
+
+    private void processDataWithPagination(String tableName, int pageSize, List<Column> preparedColumns, IncrementState incrementForCurrentPackage){
+        int countRows = prepareDataForTransferService.getCount(tableName);
         int countPages = prepareDataForTransferService.findPagesCount(tableName, pageSize);
         loggerTech.send("Start transfer data to raw_data." + tableName +
                         ". Count rows in table: " + countRows +
                         ". Count pages: " + countPages + ". Page size: " + pageSize,
                 SubTypeIdLoggingEvent.INFO.name());
-
+        int currentPageNum;
         for (int i = 0; i < countPages; i++) {
             currentPageNum = i;
             Page<Map<String, Object>> dataList =
@@ -100,15 +117,38 @@ public class TableService {
                         SubTypeIdLoggingEvent.INFO.name());
             }
         }
-        espdMatObjRawDataDAO.save(espdMatObj);
+    }
 
-        loggerAudit.send("Finishing processing the table " + espdMatObj.getSrcRealTable(), SubTypeIdAuditEvent.F0.name());
+    private void processDataWithPaginationWithMaxCtlLoadingAndValidFrom(String tableName, int pageSize, List<Column> preparedColumns, IncrementState incrementForCurrentPackage){
+        int countRows = prepareDataForTransferService.getCountWithMaxCtlLoadingAndValidfrom(tableName);
+        int countPages = prepareDataForTransferService.findPagesCountWithMaxCtlLoadingAndValidfrom(tableName, pageSize);
+        loggerTech.send("Start transfer data to raw_data." + tableName +
+                        ". Count rows in table: " + countRows +
+                        ". Count pages: " + countPages + ". Page size: " + pageSize,
+                SubTypeIdLoggingEvent.INFO.name());
+        int currentPageNum;
+        for (int i = 0; i < countPages; i++) {
+            currentPageNum = i;
+            Page<Map<String, Object>> dataList =
+                    prepareDataForTransferService.findPaginatedWithMaxCtlLoadingAndValidfrom(tableName, PageRequest.of(currentPageNum, pageSize), incrementForCurrentPackage);
+            processPage(dataList, tableName, preparedColumns);
+            if (i % PAGES_COUNT_LOGGING_CHECKPOINT == 0 ) {
+                loggerTech.send("Page " + (currentPageNum + 1) + " of " + countPages + " processed",
+                        SubTypeIdLoggingEvent.INFO.name());
+            }
+        }
+    }
+
+    private void processPage(Page<Map<String, Object>> dataList, String tableName, List<Column> preparedColumns){
+        prepareDataForTransferService.joinColumnsAndData(preparedColumns, dataList.getContent());
+        String sqlQuery = transferDataService.queryBuild(preparedColumns, tableName);
+        transferDataService.upsert(preparedColumns, sqlQuery);
 
     }
 
     private int getPageSize(String tableName) {
         long tableSize = jdbcPostgresTablesInfoDao.getTableSize(tableName);
-        long numberOfEntries = jdbcPostgresTablesInfoDao.getNumberOfEntries(tableName);
+        long numberOfEntries = prepareDataForTransferService.getCount(tableName);
         int pageSize = (int) (numberOfEntries * MEMORY_AVAILABLE / tableSize);
         return Math.max(Math.min(pageSize, MAX_PAGE_SIZE), 1) ;
     }
