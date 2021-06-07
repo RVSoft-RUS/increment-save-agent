@@ -52,4 +52,9 @@
         <jndi-name>java:/env/increment/memoryAvailable</jndi-name>
     </resource-env-ref>
 
+    <resource-env-ref>
+        <resource-env-ref-name>increment/pagination/pagesCountLoggingCheckpoint</resource-env-ref-name>
+        <jndi-name>java:/env/increment/pagination/pagesCountLoggingCheckpoint</jndi-name>
+    </resource-env-ref>
+
 </jboss-web>

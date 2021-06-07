@@ -65,6 +65,10 @@
     <resource-env-ref-type>java.lang.String</resource-env-ref-type>
   </resource-env-ref>
 
+  <resource-env-ref>
+    <resource-env-ref-name>increment/pagination/pagesCountLoggingCheckpoint</resource-env-ref-name>
+    <resource-env-ref-type>java.lang.String</resource-env-ref-type>
+  </resource-env-ref>
 
 </web-app>
 

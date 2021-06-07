@@ -45,4 +45,7 @@
     <Environment name="increment/memoryAvailable" value="1024"
                  type="java.lang.String" override="false"/>
 
+    <Environment name="increment/pagination/pagesCountLoggingCheckpoint" value="3"
+                 type="java.lang.String" override="false"/>
+
 </Context>

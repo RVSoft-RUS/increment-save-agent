@@ -35,6 +35,9 @@ public class TableService {
 
     private static final long MEMORY_AVAILABLE  = 1024 * 1024 * Integer.parseInt(Utils.getJNDIValue("java:comp/env/increment/memoryAvailable"));
     private static final int MAX_PAGE_SIZE  = 50_000;
+    //Эмпирически: для таблицы в 50 млн строк объемом 13 ГБ и размера страницы 40000 установить значение параметра в 40 страниц,
+    //чтобы получить запись в лог в среднем каждые 10 минут
+    private static final int PAGES_COUNT_LOGGING_CHECKPOINT = Integer.parseInt(Utils.getJNDIValue("java:comp/env/increment/pagination/pagesCountLoggingCheckpoint"));
 
     private final OperationsOnTablesRawDataDAO operationsOnTablesRawDataDAO;
     private final TransferDataService transferDataService;
@@ -47,7 +50,6 @@ public class TableService {
     private final SbBrdServiceLoggingService loggerTech;
     private final DataByTableNameRawDataIncrementDao dataByTableNameRawDataIncrementDao;
     private final JdbcPostgresTablesInfoDao jdbcPostgresTablesInfoDao;
-
 
     @Transactional(propagation = Propagation.NESTED, transactionManager = "transactionManagerRawData")
     void processTable(EspdMatObj espdMatObj, EspdMat espdMat, IncrementState incrementForCurrentPackage) {
@@ -85,6 +87,7 @@ public class TableService {
                         ". Count rows in table: " + countRows +
                         ". Count pages: " + countPages + ". Page size: " + pageSize,
                 SubTypeIdLoggingEvent.INFO.name());
+
         for (int i = 0; i < countPages; i++) {
             currentPageNum = i;
             Page<Map<String, Object>> dataList =
@@ -92,6 +95,10 @@ public class TableService {
             prepareDataForTransferService.joinColumnsAndData(preparedColumns, dataList.getContent());
             String sqlQuery = transferDataService.queryBuild(preparedColumns, tableName);
             transferDataService.upsert(preparedColumns, sqlQuery);
+            if (i % PAGES_COUNT_LOGGING_CHECKPOINT == 0 ) {
+                loggerTech.send("Page " + (currentPageNum + 1) + " of " + countPages + " processed",
+                        SubTypeIdLoggingEvent.INFO.name());
+            }
         }
         espdMatObjRawDataDAO.save(espdMatObj);
 
