@@ -45,18 +45,18 @@ public class JdbcPostgresTablesInfoDao {
 
     /**
      *
-     * @param tableName имя таблицы <b>в схеме raw_data</b>
+     * @param tableName имя таблицы <b>в схеме raw_data_increment</b>
      * @return Количество полей в таблице (0 при несуществующей таблице)
      */
     public Integer getColumnsCountFromTable(String tableName) {
         String sqlgetColumnsCountFromTable = "select count(*) from information_schema.columns\n" +
-                "where table_schema = 'raw_data' AND table_name = '" + tableName + "'";
+                "where table_schema = 'raw_data_increment' AND table_name = '" + tableName.toLowerCase() + "'";
 
         return jdbcTemplate.queryForObject(sqlgetColumnsCountFromTable, Integer.class);
     }
 
     /**
-     * @param tableName имя таблицы <b>в схеме raw_data</b>
+     * @param tableName имя таблицы <b>в схеме raw_data_increment</b>
      * @return String Строка с единицами измерения KB, MB, GB или TB. Для несуществующей
      * таблицы возвращает 0.
      */
@@ -72,26 +72,13 @@ public class JdbcPostgresTablesInfoDao {
      */
     public Long getTableSize(String tableName) {
         try {
-            String sqlGetTableSize = "SELECT pg_total_relation_size('raw_data." + tableName + "')";
+            String sqlGetTableSize = "SELECT pg_total_relation_size('raw_data_increment." + tableName + "')";
             return jdbcTemplate.queryForObject(sqlGetTableSize, Long.class);
         } catch (Exception e) {
             return 0L;
         }
     }
 
-    /**
-     * @param tableName имя таблицы <b>в схеме raw_data</b>
-     * @return Long Количество записей в таблице. Для несуществующей
-     * таблицы возвращает 0.
-     */
-    public Long getNumberOfEntries(String tableName) {
-        try {
-            String sqlGetNumberOfEntries = "SELECT count(*) from raw_data." + tableName;
-            return jdbcTemplate.queryForObject(sqlGetNumberOfEntries, Long.class);
-        } catch (Exception e) {
-            return 0L;
-        }
-    }
 
     //Для дебага метод
     public List<String> getAllTablesFromRawData() {
