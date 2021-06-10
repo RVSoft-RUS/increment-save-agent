@@ -45,7 +45,7 @@ public class DataByTableNameRawDataIncrementDao {
 
         String sql = "SELECT curtable.*, " + incrementForCurrentPackage.getIncrPackRunId() + " as INCR_PACK_RUN_ID" +
                 " FROM " +
-                " (select *, row_number() over (partition by " + primaryKeyString + " order by CTL_LOADING desc, ctl_validfrom  desc) as rownum\n" +
+                " (select *, row_number() over (partition by " + primaryKeyString + " order by CTL_LOADING desc NULL LAST, ctl_validfrom  desc NULL LAST) as rownum\n" +
                 " FROM RAW_DATA_INCREMENT." + table + " ) as curtable " +
                 " WHERE rownum = 1 " +
                 " ORDER BY :primaryKeys LIMIT :pageSize OFFSET :startItem;";
@@ -60,7 +60,7 @@ public class DataByTableNameRawDataIncrementDao {
     public Integer getCountByTableNameWithMaxCtlLoadingAndValidfrom(String table, List<String> primaryKeys) {
         String primaryKeyString = String.join(",", primaryKeys);
         String sql =    "select count(curtable.*) " +
-                        "from (  select *, row_number() over (partition by " + primaryKeyString + " order by CTL_LOADING desc, ctl_validfrom desc) as rownum " +
+                        "from (  select *, row_number() over (partition by " + primaryKeyString + " order by CTL_LOADING desc NULL LAST, ctl_validfrom desc NULL LAST) as rownum " +
                         "        from raw_data_increment." + table + ") curtable " +
                         " where rownum = 1;";
         return jdbcTemplate.queryForObject(sql, Integer.class);
